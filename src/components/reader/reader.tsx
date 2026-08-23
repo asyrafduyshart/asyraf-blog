@@ -294,7 +294,7 @@ export function Reader({
         >
           <div className="reader-content">
             <h1 className="reader-section-title">{sectionTitle}</h1>
-            <ReaderPortableText value={section.blocks} />
+            <ReaderPortableText language={post.language} value={section.blocks} />
           </div>
         </article>
       </div>

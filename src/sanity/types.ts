@@ -20,6 +20,17 @@ export interface SanityImage {
   crop?: { top: number; bottom: number; left: number; right: number } | null;
 }
 
+/**
+ * Custom Portable Text block for copyable prompts:
+ * `{ name: 'promptSnippet', type: 'object' }` with `title` + `code` fields.
+ */
+export interface PromptSnippetBlock {
+  _type: "promptSnippet";
+  _key?: string;
+  title?: string | null;
+  code?: string | null;
+}
+
 export interface PostCategory {
   title: string;
   slug: string;

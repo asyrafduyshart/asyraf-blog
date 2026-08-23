@@ -164,7 +164,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
       {/* Long-form body */}
       <div className="mx-auto max-w-2xl px-6 pt-14 pb-10 sm:pt-16">
         {post.body && post.body.length > 0 ? (
-          <PostBody value={post.body} />
+          <PostBody language={language} value={post.body} />
         ) : null}
       </div>
 

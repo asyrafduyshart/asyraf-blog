@@ -1,14 +1,20 @@
 import type {
   PortableTextComponents,
   PortableTextMarkComponentProps,
+  PortableTextTypeComponentProps,
 } from "@portabletext/react";
 import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 import Image from "next/image";
 import NextLink from "next/link";
 import { PortableText, toPlainText } from "next-sanity";
 
+import { PromptSnippetCard } from "@/components/prompt-snippet-card";
 import { urlFor } from "@/sanity/image";
-import type { SanityImage } from "@/sanity/types";
+import type {
+  PostLanguage,
+  PromptSnippetBlock,
+  SanityImage,
+} from "@/sanity/types";
 
 interface LinkMark extends TypedObject {
   _type: "link";
@@ -85,7 +91,7 @@ function BodyImage({ value }: { value: SanityImage }) {
   );
 }
 
-const components: PortableTextComponents = {
+const baseComponents: Omit<PortableTextComponents, "types"> = {
   block: {
     normal: ({ children }) => <p className="mb-6 text-pretty">{children}</p>,
     h2: ({ children, value }) => (
@@ -143,12 +149,28 @@ const components: PortableTextComponents = {
     ),
     link: BodyLink,
   },
-  types: {
-    image: BodyImage,
-  },
 };
 
-export function PostBody({ value }: { value: PortableTextBlock[] }) {
+export function PostBody({
+  value,
+  language = "id",
+}: {
+  value: PortableTextBlock[];
+  language?: PostLanguage;
+}) {
+  // The prompt-snippet copy button is labeled in the post's language.
+  const components: PortableTextComponents = {
+    ...baseComponents,
+    types: {
+      image: BodyImage,
+      promptSnippet: ({
+        value: snippet,
+      }: PortableTextTypeComponentProps<PromptSnippetBlock>) => (
+        <PromptSnippetCard language={language} snippet={snippet} />
+      ),
+    },
+  };
+
   // Reading rhythm borrowed from F15's reader: ~18px body,
   // 1.75 line height, prose-width measure.
   return (

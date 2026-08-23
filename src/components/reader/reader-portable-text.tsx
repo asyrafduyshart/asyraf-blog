@@ -4,13 +4,19 @@ import {
   PortableText,
   type PortableTextComponents,
   type PortableTextMarkComponentProps,
+  type PortableTextTypeComponentProps,
 } from "@portabletext/react";
 import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 import Image from "next/image";
 import NextLink from "next/link";
 
+import { PromptSnippetCard } from "@/components/prompt-snippet-card";
 import { urlFor } from "@/sanity/image";
-import type { SanityImage } from "@/sanity/types";
+import type {
+  PostLanguage,
+  PromptSnippetBlock,
+  SanityImage,
+} from "@/sanity/types";
 
 interface LinkMark extends TypedObject {
   _type: "link";
@@ -66,7 +72,7 @@ function ReaderImage({ value }: { value: SanityImage }) {
  * h2s never appear here (they become section boundaries); any stray ones
  * are rendered as h3 to keep one title per section.
  */
-const components: PortableTextComponents = {
+const baseComponents: Omit<PortableTextComponents, "types"> = {
   block: {
     normal: ({ children }) => <p>{children}</p>,
     h2: ({ children }) => <h3>{children}</h3>,
@@ -88,11 +94,30 @@ const components: PortableTextComponents = {
     code: ({ children }) => <code>{children}</code>,
     link: ReaderLink,
   },
-  types: {
-    image: ReaderImage,
-  },
 };
 
-export function ReaderPortableText({ value }: { value: PortableTextBlock[] }) {
+export function ReaderPortableText({
+  value,
+  language = "id",
+}: {
+  value: PortableTextBlock[];
+  language?: PostLanguage;
+}) {
+  const components: PortableTextComponents = {
+    ...baseComponents,
+    types: {
+      image: ReaderImage,
+      promptSnippet: ({
+        value: snippet,
+      }: PortableTextTypeComponentProps<PromptSnippetBlock>) => (
+        <PromptSnippetCard
+          language={language}
+          snippet={snippet}
+          variant="reader"
+        />
+      ),
+    },
+  };
+
   return <PortableText components={components} value={value} />;
 }
