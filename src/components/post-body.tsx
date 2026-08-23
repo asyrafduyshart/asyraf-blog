@@ -38,7 +38,7 @@ function BodyLink({
   const href = value?.href ?? "#";
   const isInternal = href.startsWith("/") || href.startsWith("#");
   const className =
-    "font-medium text-foreground underline decoration-accent/50 decoration-[1.5px] underline-offset-4 transition-colors hover:text-accent hover:decoration-accent";
+    "font-medium text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent";
 
   if (isInternal) {
     return (
@@ -69,7 +69,7 @@ function BodyImage({ value }: { value: SanityImage }) {
       <Image
         alt={value.alt ?? ""}
         blurDataURL={value.asset.metadata?.lqip ?? undefined}
-        className="w-full rounded-2xl border border-separator"
+        className="w-full rounded-lg border border-border"
         height={height}
         placeholder={value.asset.metadata?.lqip ? "blur" : "empty"}
         sizes="(max-width: 768px) 100vw, 672px"
@@ -87,12 +87,10 @@ function BodyImage({ value }: { value: SanityImage }) {
 
 const components: PortableTextComponents = {
   block: {
-    normal: ({ children }) => (
-      <p className="mb-6 text-lg leading-8 text-foreground/90">{children}</p>
-    ),
+    normal: ({ children }) => <p className="mb-6 text-pretty">{children}</p>,
     h2: ({ children, value }) => (
       <h2
-        className="mt-12 mb-5 scroll-mt-24 font-sans text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
+        className="mt-12 mb-3 scroll-mt-24 font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
         id={headingId(value)}
       >
         {children}
@@ -100,19 +98,19 @@ const components: PortableTextComponents = {
     ),
     h3: ({ children, value }) => (
       <h3
-        className="mt-10 mb-4 scroll-mt-24 font-sans text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+        className="mt-10 mb-3 scroll-mt-24 font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
         id={headingId(value)}
       >
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="mt-8 mb-3 font-sans text-lg font-semibold tracking-tight text-foreground">
+      <h4 className="mt-8 mb-2 font-heading text-lg font-semibold tracking-tight text-foreground">
         {children}
       </h4>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="my-8 border-s-2 border-accent ps-6 font-serif text-xl leading-8 text-muted italic">
+      <blockquote className="my-8 border-s-2 border-accent/40 ps-4 text-muted italic">
         {children}
       </blockquote>
     ),
@@ -130,12 +128,8 @@ const components: PortableTextComponents = {
     ),
   },
   listItem: {
-    bullet: ({ children }) => (
-      <li className="text-lg leading-8 text-foreground/90">{children}</li>
-    ),
-    number: ({ children }) => (
-      <li className="text-lg leading-8 text-foreground/90">{children}</li>
-    ),
+    bullet: ({ children }) => <li>{children}</li>,
+    number: ({ children }) => <li>{children}</li>,
   },
   marks: {
     strong: ({ children }) => (
@@ -155,8 +149,10 @@ const components: PortableTextComponents = {
 };
 
 export function PostBody({ value }: { value: PortableTextBlock[] }) {
+  // Reading rhythm borrowed from F15's `.book-content`:
+  // ~17px body, 1.75 line height, prose-width measure.
   return (
-    <div className="font-serif">
+    <div className="mx-auto max-w-prose text-[1.0625rem] leading-[1.75] text-foreground/90">
       <PortableText components={components} value={value} />
     </div>
   );

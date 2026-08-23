@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 
 import "./globals.css";
 
@@ -14,10 +14,11 @@ const inter = Inter({
   display: "swap",
 });
 
-const newsreader = Newsreader({
+const fraunces = Fraunces({
   subsets: ["latin", "latin-ext"],
   style: ["normal", "italic"],
-  variable: "--font-newsreader",
+  axes: ["opsz"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
@@ -44,20 +45,29 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      className={`${inter.variable} ${newsreader.variable}`}
+      className={`${inter.variable} ${fraunces.variable}`}
       lang={siteConfig.defaultLanguage}
       suppressHydrationWarning
     >
-      <body className="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
+      <body
+        className="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased"
+        id="top"
+      >
         <Providers>
           <SiteNavbar />
           <main className="flex-1">{children}</main>
-          <footer className="border-t border-separator">
-            <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 px-6 py-8 text-sm text-muted sm:flex-row">
+          <footer className="border-t border-border">
+            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-10 text-sm text-muted sm:flex-row">
               <p>
                 © {new Date().getFullYear()} {siteConfig.name} ·{" "}
                 {siteConfig.domain}
               </p>
+              <a
+                className="rounded-full px-3 py-1.5 transition-colors hover:bg-default-soft hover:text-foreground"
+                href="#top"
+              >
+                Kembali ke atas ↑
+              </a>
             </div>
           </footer>
         </Providers>
