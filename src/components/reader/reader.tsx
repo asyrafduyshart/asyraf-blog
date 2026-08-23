@@ -4,6 +4,7 @@ import "@fontsource-variable/gelasio";
 
 import { ChevronLeft, ChevronRight, Settings2, X } from "lucide-react";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
@@ -36,13 +37,22 @@ function readerUrl(slug: string, section: number): string {
   return `/${slug}/read/${section}`;
 }
 
+function parseSectionFromPath(pathname: string): number | null {
+  const match = pathname.match(/\/read\/(\d+)\/?$/);
+  if (!match) return null;
+  const value = Number.parseInt(match[1], 10);
+  return Number.isFinite(value) ? value : null;
+}
+
 /**
  * Full-screen reading mode, ported from the F15 Library reader.
  *
  * Section navigation is client-side (directional slide + fade); the URL is
  * kept in sync via the History API so every section stays deep-linkable at
- * `/[slug]/read/[section]`. Browser back/forward re-renders the route,
- * which flows back in through `initialSection`.
+ * `/[slug]/read/[section]`. The URL is the source of truth: browser
+ * back/forward between sections is handled by a `popstate` listener
+ * (Next.js restores native-pushState entries without re-rendering), and
+ * on mount the current pathname wins over the server-provided section.
  */
 export function Reader({
   post,
@@ -58,6 +68,7 @@ export function Reader({
 }) {
   const total = sections.length;
   const labels = getReaderLabels(post.language);
+  const router = useRouter();
   const { prefs, updatePrefs } = useReaderPrefs();
 
   const [view, setView] = useState<ReaderView>(() => ({
@@ -90,36 +101,49 @@ export function Reader({
     [post.slug, total],
   );
 
-  // Resume the last visited section (base `/read` route only) and
-  // normalize the URL when the requested section had to be clamped.
+  // Mount sync: adopt the section encoded in the current URL (it can
+  // differ from `initialSection` when a history entry is restored), fall
+  // back to the stored position on the base `/read` route, and normalize
+  // the URL to the canonical `/read/{n}` form.
   useEffect(() => {
-    let target = clampSectionIndex(initialSection, total);
+    const urlSection = parseSectionFromPath(window.location.pathname);
+    let target: number;
 
-    if (resume) {
+    if (urlSection !== null) {
+      target = clampSectionIndex(urlSection, total);
+    } else if (resume) {
       const stored = readStoredReaderPosition(post.slug);
-      if (stored && stored >= 1 && stored <= total) {
-        target = stored;
-      }
+      target =
+        stored && stored >= 1 && stored <= total
+          ? stored
+          : clampSectionIndex(initialSection, total);
+    } else {
+      target = clampSectionIndex(initialSection, total);
     }
 
     if (target !== viewRef.current.index) {
       setView({ index: target, direction: 0 });
     }
-    if (target !== initialSection) {
+    if (urlSection !== target) {
       window.history.replaceState(null, "", readerUrl(post.slug, target));
     }
     // Mount-only: initial props are stable for the lifetime of the reader.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Browser back/forward (or any external navigation between sections)
-  // re-renders the route with a new `initialSection`.
-  const previousInitialRef = useRef(initialSection);
+  // Browser back/forward between section entries: Next.js restores the
+  // URL without re-rendering, so follow it here. URLs outside the reader
+  // (e.g. back to the post) are ignored — the router unmounts us instead.
   useEffect(() => {
-    if (previousInitialRef.current === initialSection) return;
-    previousInitialRef.current = initialSection;
-    goTo(initialSection, { push: false });
-  }, [goTo, initialSection]);
+    const onPopState = () => {
+      const urlSection = parseSectionFromPath(window.location.pathname);
+      if (urlSection === null) return;
+      goTo(clampSectionIndex(urlSection, total), { push: false });
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [goTo, total]);
 
   // Remember the reading position per post (drives the resume behavior).
   useEffect(() => {
@@ -165,13 +189,18 @@ export function Reader({
         event.preventDefault();
         goTo(viewRef.current.index + 1);
       } else if (event.key === "Escape") {
-        setSettingsOpen(false);
+        // First Escape closes the settings panel, the next one the reader.
+        if (settingsOpen) {
+          setSettingsOpen(false);
+        } else {
+          router.push(`/${post.slug}`);
+        }
       }
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [goTo]);
+  }, [goTo, post.slug, router, settingsOpen]);
 
   const section = sections[view.index - 1];
   if (!section) return null;
@@ -192,9 +221,13 @@ export function Reader({
           </NextLink>
 
           <div className="min-w-0 text-center">
-            <p className="truncate text-xs text-(--reader-muted)">
-              {post.title}
-            </p>
+            {/* The intro section falls back to the post title — avoid
+                printing the same line twice in the header. */}
+            {sectionTitle !== post.title ? (
+              <p className="truncate text-xs text-(--reader-muted)">
+                {post.title}
+              </p>
+            ) : null}
             <p className="truncate text-sm font-medium">{sectionTitle}</p>
           </div>
 
