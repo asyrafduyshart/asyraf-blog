@@ -30,11 +30,18 @@ function ArrowRightIcon({ className }: { className?: string }) {
   );
 }
 
-/* Soft gradient panel beside the hero — flat surface, hairline border. */
-function HeroVisual() {
+/* Woodcut portrait beside the hero — B&W engraving, square to balance the grid. */
+function HeroPortrait() {
   return (
-    <div aria-hidden className="relative hidden lg:block">
-      <div className="hero-visual aspect-[4/3] rounded-2xl border border-border" />
+    <div className="relative hidden aspect-square overflow-hidden rounded-2xl border border-border lg:block">
+      <Image
+        alt="Potret woodcut hitam-putih"
+        className="object-cover"
+        fill
+        priority
+        sizes="(min-width: 75rem) 28rem, 42vw"
+        src="/images/hero-portrait.png"
+      />
     </div>
   );
 }
@@ -134,11 +141,11 @@ export default async function HomePage() {
             className="font-heading text-[clamp(2.5rem,6vw+0.5rem,4.25rem)] leading-[0.98] font-medium tracking-[-0.025em] text-balance text-foreground"
             id="hero-heading"
           >
-            Tentang AI, alat berpikir, dan hal-hal yang layak diingat.
+            Di antara semua yang bisa dipilih, kenapa masih di sini?
           </h1>
           <p className="mt-5 max-w-[46ch] text-base text-pretty text-muted sm:text-lg">
-            Catatan dan tulisan panjang dari Asyraf — ditulis untuk dibaca
-            pelan-pelan.
+            Catatan tentang AI, alat berpikir, dan pertanyaan yang tidak mau
+            selesai — ditulis pelan-pelan, supaya tidak lari dari keraguan.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-x-2 gap-y-3">
@@ -170,7 +177,7 @@ export default async function HomePage() {
           ) : null}
         </div>
 
-        <HeroVisual />
+        <HeroPortrait />
       </section>
 
       {latest ? <FeaturedPost post={latest} /> : null}
