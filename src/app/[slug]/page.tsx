@@ -86,28 +86,30 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
     <article lang={language}>
       <HtmlLang lang={language} />
 
-      {/* Magazine-style hero */}
+      {/* Magazine-style hero with a restrained accent glow */}
       <header className="hero-surface border-b border-separator">
-        <div className="mx-auto flex max-w-4xl flex-col items-center px-6 pt-20 pb-16 text-center sm:pt-28 sm:pb-24">
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-muted">
+        <div className="mx-auto flex max-w-4xl flex-col items-center px-6 pt-16 pb-14 text-center sm:pt-24 sm:pb-20">
+          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-sm text-muted">
             {date && post.publishedAt ? (
-              <time dateTime={post.publishedAt}>{date}</time>
+              <>
+                <time dateTime={post.publishedAt}>{date}</time>
+                <span aria-hidden className="opacity-50">
+                  ·
+                </span>
+              </>
             ) : null}
-            <span aria-hidden className="text-separator-tertiary">
-              •
-            </span>
             <span>{readingTimeLabel(post.estimatedReadingTime, language)}</span>
             <Chip color="accent" size="sm" variant="soft">
               <Chip.Label>{languageLabel(language)}</Chip.Label>
             </Chip>
           </div>
 
-          <h1 className="mt-8 font-serif text-4xl leading-[1.08] font-semibold tracking-tight text-balance sm:text-6xl">
+          <h1 className="mt-8 font-heading text-[clamp(2.25rem,4.5vw+1rem,3.75rem)] leading-[1.02] font-medium tracking-[-0.02em] text-balance">
             {headline}
           </h1>
 
           {subheadline ? (
-            <p className="mt-7 max-w-2xl font-serif text-xl leading-8 text-muted text-pretty sm:text-2xl sm:leading-9">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted text-pretty sm:text-xl sm:leading-9">
               {subheadline}
             </p>
           ) : null}
@@ -120,7 +122,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
             priority
             alt={mainImage.alt ?? headline}
             blurDataURL={mainImage.asset?.metadata?.lqip ?? undefined}
-            className="w-full rounded-2xl border border-separator bg-surface shadow-xl"
+            className="w-full rounded-lg border border-border bg-surface"
             height={
               imageDimensions?.aspectRatio
                 ? Math.round(1600 / imageDimensions.aspectRatio)
@@ -150,7 +152,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
         <Separator className="mb-8" />
         <div className="flex flex-wrap items-center justify-between gap-4">
           <NextLink
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-accent"
+            className="inline-flex items-center gap-2 rounded-full text-sm font-medium text-muted transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
             href="/"
           >
             <span aria-hidden>←</span>

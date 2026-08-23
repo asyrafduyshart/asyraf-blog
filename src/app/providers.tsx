@@ -11,8 +11,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <RouterProvider navigate={(href: string) => router.push(href)}>
       <NextThemesProvider
         attribute="class"
-        defaultTheme="dark"
+        defaultTheme="light"
         disableTransitionOnChange
+        enableSystem={false}
       >
         {children}
       </NextThemesProvider>
