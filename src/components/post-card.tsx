@@ -2,6 +2,7 @@ import { Card, Chip } from "@heroui/react";
 import Image from "next/image";
 import NextLink from "next/link";
 
+import { CategoryChips } from "@/components/category-chips";
 import { formatDate, languageLabel, readingTimeLabel } from "@/lib/text";
 import { urlFor } from "@/sanity/image";
 import type { PostListItem } from "@/sanity/types";
@@ -61,6 +62,8 @@ export function PostCard({ post }: { post: PostListItem }) {
             <Chip.Label>{languageLabel(language)}</Chip.Label>
           </Chip>
         </div>
+
+        <CategoryChips categories={post.categories} />
 
         <h3 className="font-heading text-xl leading-snug font-medium tracking-tight text-balance sm:text-[1.35rem]">
           <NextLink

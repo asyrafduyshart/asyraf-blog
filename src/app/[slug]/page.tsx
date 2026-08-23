@@ -1,11 +1,14 @@
 import { Chip, Separator } from "@heroui/react";
+import { BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
 
+import { CategoryChips } from "@/components/category-chips";
 import { HtmlLang } from "@/components/html-lang";
 import { PostBody } from "@/components/post-body";
+import { splitReaderSections } from "@/lib/reader-sections";
 import { siteConfig } from "@/lib/site";
 import { formatDate, languageLabel, readingTimeLabel } from "@/lib/text";
 import { client } from "@/sanity/client";
@@ -81,6 +84,8 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
   const subheadline = post.heroSubheadline ?? post.excerpt;
   const mainImage = post.mainImage?.asset ? post.mainImage : null;
   const imageDimensions = mainImage?.asset?.metadata?.dimensions;
+  // Reading mode is only offered when the body yields at least one section.
+  const hasReaderSections = splitReaderSections(post.body).length > 0;
 
   return (
     <article lang={language}>
@@ -104,6 +109,11 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
             </Chip>
           </div>
 
+          <CategoryChips
+            categories={post.categories}
+            className="mt-4 justify-center"
+          />
+
           <h1 className="mt-8 font-heading text-[clamp(2.25rem,4.5vw+1rem,3.75rem)] leading-[1.02] font-medium tracking-[-0.02em] text-balance">
             {headline}
           </h1>
@@ -112,6 +122,16 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted text-pretty sm:text-xl sm:leading-9">
               {subheadline}
             </p>
+          ) : null}
+
+          {hasReaderSections ? (
+            <NextLink
+              className="mt-8 inline-flex h-11 items-center gap-2 rounded-full bg-accent px-6 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              href={`/${post.slug}/read`}
+            >
+              <BookOpen aria-hidden size={16} strokeWidth={1.75} />
+              {language === "en" ? "Reading mode" : "Mode baca"}
+            </NextLink>
           ) : null}
         </div>
       </header>
@@ -133,9 +153,9 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
             src={urlFor(mainImage).width(1600).fit("max").url()}
             width={1600}
           />
-          {mainImage.alt ? (
+          {mainImage.caption ? (
             <figcaption className="mt-3 text-center text-sm text-muted">
-              {mainImage.alt}
+              {mainImage.caption}
             </figcaption>
           ) : null}
         </figure>

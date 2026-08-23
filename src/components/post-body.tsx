@@ -65,20 +65,20 @@ function BodyImage({ value }: { value: SanityImage }) {
     : Math.round((width * 9) / 16);
 
   return (
-    <figure className="my-10">
+    <figure className="my-10 sm:my-12">
       <Image
         alt={value.alt ?? ""}
         blurDataURL={value.asset.metadata?.lqip ?? undefined}
-        className="w-full rounded-lg border border-border"
+        className="w-full rounded-lg border border-border bg-surface"
         height={height}
         placeholder={value.asset.metadata?.lqip ? "blur" : "empty"}
         sizes="(max-width: 768px) 100vw, 672px"
         src={urlFor(value).width(1440).fit("max").url()}
         width={width}
       />
-      {value.alt ? (
+      {value.caption ? (
         <figcaption className="mt-3 text-center text-sm text-muted">
-          {value.alt}
+          {value.caption}
         </figcaption>
       ) : null}
     </figure>
