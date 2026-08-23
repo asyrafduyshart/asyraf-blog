@@ -7,3 +7,27 @@ export const siteConfig = {
     "Catatan Asyraf tentang AI, alat berpikir, dan pertanyaan yang tidak mau selesai.",
   defaultLanguage: "id" as const,
 };
+
+/**
+ * Public social profiles, rendered by `SocialLinks` (hero + footer).
+ * Kept here so the URLs live in exactly one place.
+ */
+export const socialLinks = [
+  {
+    id: "x",
+    label: "X (Twitter)",
+    href: "https://x.com/AsyrafDuyshart",
+  },
+  {
+    id: "threads",
+    label: "Threads",
+    href: "https://www.threads.net/@asyraf.ai",
+  },
+  {
+    id: "instagram",
+    label: "Instagram",
+    href: "https://www.instagram.com/asyraf.ai/",
+  },
+] as const;
+
+export type SocialLink = (typeof socialLinks)[number];

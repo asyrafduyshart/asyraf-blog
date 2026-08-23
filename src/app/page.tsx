@@ -3,6 +3,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 
 import { PostCard } from "@/components/post-card";
+import { SocialLinks } from "@/components/social-links";
 import { formatDate, readingTimeLabel } from "@/lib/text";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
@@ -164,6 +165,11 @@ export default async function HomePage() {
             >
               Semua tulisan
             </a>
+            <span
+              aria-hidden
+              className="mx-1 hidden h-5 w-px bg-border sm:block"
+            />
+            <SocialLinks />
           </div>
 
           {readingRange ? (
