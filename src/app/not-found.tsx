@@ -3,7 +3,7 @@ import NextLink from "next/link";
 export default function NotFound() {
   return (
     <div className="hero-surface flex min-h-[60vh] flex-col items-center justify-center px-6 py-24 text-center">
-      <p className="text-xs font-semibold tracking-[0.35em] text-accent uppercase">
+      <p className="text-xs font-semibold tracking-[0.35em] text-muted uppercase">
         404
       </p>
       <h1 className="mt-4 font-heading text-4xl leading-[1.05] font-medium tracking-tight text-balance sm:text-5xl">

@@ -149,10 +149,10 @@ const components: PortableTextComponents = {
 };
 
 export function PostBody({ value }: { value: PortableTextBlock[] }) {
-  // Reading rhythm borrowed from F15's `.book-content`:
-  // ~17px body, 1.75 line height, prose-width measure.
+  // Reading rhythm borrowed from F15's reader: ~18px body,
+  // 1.75 line height, prose-width measure.
   return (
-    <div className="mx-auto max-w-prose text-[1.0625rem] leading-[1.75] text-foreground/90">
+    <div className="mx-auto max-w-prose text-lg leading-[1.75] text-foreground/90">
       <PortableText components={components} value={value} />
     </div>
   );

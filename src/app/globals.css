@@ -85,6 +85,27 @@
   --separator: oklch(1 0 0 / 10%);
 }
 
+/* Soft decorative gradient panel beside the home hero — flat, no imagery. */
+.hero-visual {
+  background:
+    radial-gradient(
+      60% 80% at 20% 15%,
+      color-mix(in oklab, var(--accent) 22%, transparent),
+      transparent 65%
+    ),
+    radial-gradient(
+      55% 70% at 85% 30%,
+      color-mix(in oklab, var(--accent) 12%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      70% 90% at 60% 95%,
+      color-mix(in oklab, var(--accent) 16%, transparent),
+      transparent 70%
+    ),
+    var(--surface);
+}
+
 /* Restrained accent glow used behind post heroes — primary at low opacity. */
 .hero-surface {
   background:

@@ -122,7 +122,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
             priority
             alt={mainImage.alt ?? headline}
             blurDataURL={mainImage.asset?.metadata?.lqip ?? undefined}
-            className="w-full rounded-xl border border-border bg-surface shadow-xl"
+            className="w-full rounded-lg border border-border bg-surface"
             height={
               imageDimensions?.aspectRatio
                 ? Math.round(1600 / imageDimensions.aspectRatio)

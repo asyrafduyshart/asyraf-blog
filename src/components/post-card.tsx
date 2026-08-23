@@ -31,7 +31,7 @@ export function PostCard({ post }: { post: PostListItem }) {
   const cover = post.mainImage?.asset ? post.mainImage : null;
 
   return (
-    <Card className="group relative overflow-hidden rounded-xl border border-border bg-surface p-0 shadow-none transition-all duration-200 ease-out hover:border-border-secondary [@media(hover:hover)]:hover:-translate-y-1">
+    <Card className="group relative overflow-hidden rounded-lg border border-border bg-surface p-0 shadow-none transition-all duration-200 ease-out hover:border-border-secondary [@media(hover:hover)]:hover:-translate-y-1">
       {cover ? (
         <div className="relative aspect-[16/9] overflow-hidden border-b border-border">
           <Image
@@ -62,7 +62,7 @@ export function PostCard({ post }: { post: PostListItem }) {
           </Chip>
         </div>
 
-        <h3 className="font-heading text-xl leading-snug font-medium tracking-tight text-balance transition-colors group-hover:text-accent sm:text-[1.35rem]">
+        <h3 className="font-heading text-xl leading-snug font-medium tracking-tight text-balance sm:text-[1.35rem]">
           <NextLink
             className="after:absolute after:inset-0 focus-visible:outline-none"
             href={`/${post.slug}`}
