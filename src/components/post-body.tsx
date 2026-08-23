@@ -8,9 +8,13 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { PortableText, toPlainText } from "next-sanity";
 
+import { ExampleResultsGallery } from "@/components/example-results-gallery";
 import { PromptSnippetCard } from "@/components/prompt-snippet-card";
+import { groupConsecutiveImages } from "@/lib/example-results";
+import { slugifyHeading } from "@/lib/text";
 import { urlFor } from "@/sanity/image";
 import type {
+  ExampleResultsBlock,
   PostLanguage,
   PromptSnippetBlock,
   SanityImage,
@@ -21,19 +25,8 @@ interface LinkMark extends TypedObject {
   href?: string;
 }
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/[\s-]+/g, "-")
-    .slice(0, 80);
-}
-
 function headingId(value: PortableTextBlock): string | undefined {
-  const id = slugify(toPlainText(value));
+  const id = slugifyHeading(toPlainText(value));
   return id.length > 0 ? id : undefined;
 }
 
@@ -158,7 +151,8 @@ export function PostBody({
   value: PortableTextBlock[];
   language?: PostLanguage;
 }) {
-  // The prompt-snippet copy button is labeled in the post's language.
+  // The prompt-snippet copy button and gallery lightbox controls are
+  // labeled in the post's language.
   const components: PortableTextComponents = {
     ...baseComponents,
     types: {
@@ -168,14 +162,23 @@ export function PostBody({
       }: PortableTextTypeComponentProps<PromptSnippetBlock>) => (
         <PromptSnippetCard language={language} snippet={snippet} />
       ),
+      exampleResults: ({
+        value: gallery,
+      }: PortableTextTypeComponentProps<ExampleResultsBlock>) => (
+        <ExampleResultsGallery language={language} value={gallery} />
+      ),
     },
   };
 
   // Reading rhythm borrowed from F15's reader: ~18px body,
-  // 1.75 line height, prose-width measure.
+  // 1.75 line height, prose-width measure. Runs of consecutive images are
+  // regrouped into example-results galleries before rendering.
   return (
     <div className="mx-auto max-w-prose text-lg leading-[1.75] text-foreground/90">
-      <PortableText components={components} value={value} />
+      <PortableText
+        components={components}
+        value={groupConsecutiveImages(value)}
+      />
     </div>
   );
 }

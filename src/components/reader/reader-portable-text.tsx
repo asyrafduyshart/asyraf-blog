@@ -10,9 +10,12 @@ import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 import Image from "next/image";
 import NextLink from "next/link";
 
+import { ExampleResultsGallery } from "@/components/example-results-gallery";
 import { PromptSnippetCard } from "@/components/prompt-snippet-card";
+import { groupConsecutiveImages } from "@/lib/example-results";
 import { urlFor } from "@/sanity/image";
 import type {
+  ExampleResultsBlock,
   PostLanguage,
   PromptSnippetBlock,
   SanityImage,
@@ -116,8 +119,21 @@ export function ReaderPortableText({
           variant="reader"
         />
       ),
+      exampleResults: ({
+        value: gallery,
+      }: PortableTextTypeComponentProps<ExampleResultsBlock>) => (
+        <ExampleResultsGallery
+          language={language}
+          value={gallery}
+          variant="reader"
+        />
+      ),
     },
   };
 
-  return <PortableText components={components} value={value} />;
+  // Consecutive plain images regroup into galleries here too, so legacy
+  // posts read the same in both surfaces.
+  return (
+    <PortableText components={components} value={groupConsecutiveImages(value)} />
+  );
 }

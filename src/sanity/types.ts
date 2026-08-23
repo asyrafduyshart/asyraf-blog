@@ -13,6 +13,8 @@ export interface SanityImageAsset {
 
 export interface SanityImage {
   _type: "image";
+  /** Present when the image lives inside an array (body, galleries). */
+  _key?: string;
   asset?: SanityImageAsset | null;
   alt?: string | null;
   caption?: string | null;
@@ -29,6 +31,23 @@ export interface PromptSnippetBlock {
   _key?: string;
   title?: string | null;
   code?: string | null;
+}
+
+/**
+ * Custom Portable Text block for example-result galleries:
+ * `{ name: 'exampleResults', type: 'object' }` with `title` + `intro`
+ * and an `images` array (image + alt/caption, hotspot enabled).
+ *
+ * Also produced synthetically by `groupConsecutiveImages` when a body
+ * contains runs of plain consecutive images (legacy posts without the
+ * dedicated block) — those carry no `title`/`intro`.
+ */
+export interface ExampleResultsBlock {
+  _type: "exampleResults";
+  _key?: string;
+  title?: string | null;
+  intro?: string | null;
+  images?: SanityImage[] | null;
 }
 
 export interface PostCategory {

@@ -25,8 +25,13 @@ This repository contains **only the web app**. All posts are authored and publis
 | `mainImage` | image (+ `alt`) | Optional hero image + Open Graph image |
 | `publishedAt` | datetime | Ordering + display date |
 | `language` | string (`id` \| `en`) | Locale-aware dates, labels, `lang` attribute |
-| `body` | portable text (blocks + images) | Article body (links + bold supported) |
+| `body` | portable text (blocks, images, `promptSnippet`, `exampleResults`) | Article body (links + bold supported) |
 | `seoTitle` / `seoDescription` | string / text | `<title>` + meta description overrides |
+
+#### Custom body blocks
+
+- **`promptSnippet`** (`title` string, `code` text) — copyable prompt card with a "Salin prompt" / "Copy prompt" button.
+- **`exampleResults`** (`title` string, `intro` text, `images[]` of image + `alt`/`caption`, min 1) — example-results gallery: responsive 2–3 column grid of 3:4 tiles with per-image captions and a click-to-expand lightbox. Runs of two or more consecutive plain `image` blocks in the body are grouped into the same gallery automatically, so older posts don't need migrating.
 
 ## Getting started
 
