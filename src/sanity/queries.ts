@@ -37,7 +37,11 @@ export const POST_QUERY = defineQuery(`
     seoDescription,
     body[] {
       ...,
-      _type == "image" => { ..., asset->{ _id, url, metadata { dimensions, lqip } } }
+      _type == "image" => { ..., asset->{ _id, url, metadata { dimensions, lqip } } },
+      _type == "exampleResults" => {
+        ...,
+        images[] { ..., asset->{ _id, url, metadata { dimensions, lqip } } }
+      }
     }
   }
 `);

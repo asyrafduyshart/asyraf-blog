@@ -129,6 +129,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Keep the page still while the gallery lightbox (modal <dialog>) is open. */
+body:has(dialog:modal) {
+  overflow: hidden;
+}
+
 /* ------------------------------------------------------------------ */
 /* Reading mode (ported from the F15 Library reader)                   */
 /* ------------------------------------------------------------------ */
@@ -294,6 +299,29 @@ html[data-reader-font="mono"] .reader-content {
   text-align: center;
   font-size: 0.8em;
   color: var(--reader-muted);
+}
+
+/*
+ * Example-results galleries inside the reader: tiles manage their own
+ * chrome (border + radius sit on the tile button), so neutralize the
+ * generic figure/img rules above, tighten captions to their tile, and
+ * let the section provide the top spacing instead of the heading.
+ */
+.reader-content [data-example-gallery] figure {
+  margin: 0;
+}
+
+.reader-content [data-example-gallery] figure img {
+  border: 0;
+  border-radius: 0;
+}
+
+.reader-content [data-example-gallery] figcaption {
+  margin-top: 0.55em;
+}
+
+.reader-content [data-example-gallery] :is(h3, h4) {
+  margin-top: 0;
 }
 
 /* Chrome (header / footer / settings) */

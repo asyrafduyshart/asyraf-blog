@@ -32,3 +32,15 @@ export function readingTimeLabel(
 export function languageLabel(language: PostLanguage = "id"): string {
   return language === "en" ? "English" : "Bahasa Indonesia";
 }
+
+/** URL-safe anchor id for in-body headings (h2/h3 blocks, gallery titles). */
+export function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/[\s-]+/g, "-")
+    .slice(0, 80);
+}
