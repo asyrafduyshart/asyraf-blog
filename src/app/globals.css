@@ -12,12 +12,16 @@
 
 /*
  * Design tokens adapted from the F15 Library design system:
- * neutral gray surfaces, hairline borders, one vibrant orange accent
- * (#F37021 → oklch(0.692 0.18 46)) and a 0.625rem base radius.
+ * neutral gray surfaces, hairline borders, one calm sea-slate teal
+ * accent (#3D6B75 → oklch(0.4989 0.0528 213.2), hover #335A63) and a
+ * 0.625rem base radius. Dark mode lightens the same teal family
+ * (#7CAEB9) so accent text keeps WCAG AA contrast on dark surfaces.
  *
  * These override HeroUI's default theme variables, so both HeroUI
  * components and the `bg-surface` / `text-accent` / `border-border`
- * utilities pick them up.
+ * utilities pick them up. `--accent-hover` is pinned here because
+ * HeroUI's derived hover (accent + 10% foreground) would drift lighter
+ * instead of deepening toward #335A63.
  */
 :root {
   --radius: 0.625rem;
@@ -40,8 +44,10 @@
   --default: oklch(0.955 0 0);
   --default-foreground: oklch(0.205 0 0);
 
-  --accent: oklch(0.692 0.18 46);
-  --accent-foreground: oklch(0.985 0 0);
+  /* #3D6B75 — white text on this fill: 5.9:1 (AA). Hover: #335A63. */
+  --accent: oklch(0.4989 0.0528 213.2);
+  --accent-hover: oklch(0.4424 0.0465 214.17);
+  --accent-foreground: oklch(1 0 0);
 
   --field-background: oklch(1 0 0);
   --field-foreground: var(--foreground);
@@ -72,8 +78,14 @@
   --default: oklch(0.269 0 0);
   --default-foreground: var(--foreground);
 
-  --accent: oklch(0.692 0.18 46);
-  --accent-foreground: oklch(0.985 0 0);
+  /*
+   * Same sea-slate hue, lightened to #7CAEB9 (hover #8ABCC8) so accent
+   * links/chips stay ≥ 6.2:1 on dark surfaces; filled CTAs therefore
+   * carry near-black text (8.1:1) instead of white.
+   */
+  --accent: oklch(0.72 0.055 213);
+  --accent-hover: oklch(0.765 0.055 213);
+  --accent-foreground: oklch(0.145 0 0);
 
   --field-background: oklch(0.205 0 0);
   --field-foreground: var(--foreground);

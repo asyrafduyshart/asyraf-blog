@@ -4,6 +4,7 @@ import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 
 import { SiteNavbar } from "@/components/site-navbar";
+import { SocialLinks } from "@/components/social-links";
 import { READER_PREFS_PREPAINT_SCRIPT } from "@/lib/reader-prefs";
 import { siteConfig } from "@/lib/site";
 
@@ -62,17 +63,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteNavbar />
           <main className="flex-1">{children}</main>
           <footer className="border-t border-border">
-            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-10 text-sm text-muted sm:flex-row">
+            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-muted sm:flex-row">
               <p>
                 © {new Date().getFullYear()} {siteConfig.name} ·{" "}
                 {siteConfig.domain}
               </p>
-              <a
-                className="rounded-full px-3 py-1.5 transition-colors hover:bg-default-soft hover:text-foreground"
-                href="#top"
-              >
-                Kembali ke atas ↑
-              </a>
+              <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-2">
+                <SocialLinks />
+                <span
+                  aria-hidden
+                  className="hidden h-5 w-px bg-border sm:block"
+                />
+                <a
+                  className="rounded-full px-3 py-1.5 transition-colors hover:bg-default-soft hover:text-foreground"
+                  href="#top"
+                >
+                  Kembali ke atas ↑
+                </a>
+              </div>
             </div>
           </footer>
         </Providers>
