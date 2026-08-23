@@ -145,8 +145,7 @@ export default async function HomePage() {
             Di antara semua yang bisa dipilih, kenapa masih di sini?
           </h1>
           <p className="mt-5 max-w-[46ch] text-base text-pretty text-muted sm:text-lg">
-            Catatan tentang AI, alat berpikir, dan pertanyaan yang tidak mau
-            selesai — ditulis pelan-pelan, supaya tidak lari dari keraguan.
+            Bukan self-help. Lebih ke self-roast yang dibungkus seperti essay.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-x-2 gap-y-3">
