@@ -4,6 +4,6 @@ export const siteConfig = {
   url: "https://blog.asyraf.ai",
   title: "Asyraf — blog.asyraf.ai",
   description:
-    "Catatan dan tulisan panjang dari Asyraf — tentang AI, alat berpikir, dan hal-hal yang layak diingat.",
+    "Catatan Asyraf tentang AI, alat berpikir, dan pertanyaan yang tidak mau selesai.",
   defaultLanguage: "id" as const,
 };
