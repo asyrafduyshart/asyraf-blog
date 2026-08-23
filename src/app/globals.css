@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+}
+
+/* Subtle magazine-style glow used behind hero sections. */
+.hero-surface {
+  background:
+    radial-gradient(
+      56rem 30rem at 82% -12%,
+      var(--accent-soft),
+      transparent 62%
+    ),
+    radial-gradient(
+      44rem 26rem at 4% 118%,
+      color-mix(in oklab, var(--accent) 9%, transparent),
+      transparent 64%
+    );
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 28%, transparent);
+}
+
+html {
+  scroll-behavior: smooth;
+}

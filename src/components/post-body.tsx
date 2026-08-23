@@ -1,0 +1,163 @@
+import type {
+  PortableTextComponents,
+  PortableTextMarkComponentProps,
+} from "@portabletext/react";
+import type { PortableTextBlock, TypedObject } from "@portabletext/types";
+import Image from "next/image";
+import NextLink from "next/link";
+import { PortableText, toPlainText } from "next-sanity";
+
+import { urlFor } from "@/sanity/image";
+import type { SanityImage } from "@/sanity/types";
+
+interface LinkMark extends TypedObject {
+  _type: "link";
+  href?: string;
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/[\s-]+/g, "-")
+    .slice(0, 80);
+}
+
+function headingId(value: PortableTextBlock): string | undefined {
+  const id = slugify(toPlainText(value));
+  return id.length > 0 ? id : undefined;
+}
+
+function BodyLink({
+  value,
+  children,
+}: PortableTextMarkComponentProps<LinkMark>) {
+  const href = value?.href ?? "#";
+  const isInternal = href.startsWith("/") || href.startsWith("#");
+  const className =
+    "font-medium text-foreground underline decoration-accent/50 decoration-[1.5px] underline-offset-4 transition-colors hover:text-accent hover:decoration-accent";
+
+  if (isInternal) {
+    return (
+      <NextLink className={className} href={href}>
+        {children}
+      </NextLink>
+    );
+  }
+
+  return (
+    <a className={className} href={href} rel="noopener noreferrer" target="_blank">
+      {children}
+    </a>
+  );
+}
+
+function BodyImage({ value }: { value: SanityImage }) {
+  if (!value?.asset) return null;
+
+  const dimensions = value.asset.metadata?.dimensions;
+  const width = Math.min(dimensions?.width ?? 1440, 1440);
+  const height = dimensions?.aspectRatio
+    ? Math.round(width / dimensions.aspectRatio)
+    : Math.round((width * 9) / 16);
+
+  return (
+    <figure className="my-10">
+      <Image
+        alt={value.alt ?? ""}
+        blurDataURL={value.asset.metadata?.lqip ?? undefined}
+        className="w-full rounded-2xl border border-separator"
+        height={height}
+        placeholder={value.asset.metadata?.lqip ? "blur" : "empty"}
+        sizes="(max-width: 768px) 100vw, 672px"
+        src={urlFor(value).width(1440).fit("max").url()}
+        width={width}
+      />
+      {value.alt ? (
+        <figcaption className="mt-3 text-center text-sm text-muted">
+          {value.alt}
+        </figcaption>
+      ) : null}
+    </figure>
+  );
+}
+
+const components: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="mb-6 text-lg leading-8 text-foreground/90">{children}</p>
+    ),
+    h2: ({ children, value }) => (
+      <h2
+        className="mt-12 mb-5 scroll-mt-24 font-sans text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
+        id={headingId(value)}
+      >
+        {children}
+      </h2>
+    ),
+    h3: ({ children, value }) => (
+      <h3
+        className="mt-10 mb-4 scroll-mt-24 font-sans text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+        id={headingId(value)}
+      >
+        {children}
+      </h3>
+    ),
+    h4: ({ children }) => (
+      <h4 className="mt-8 mb-3 font-sans text-lg font-semibold tracking-tight text-foreground">
+        {children}
+      </h4>
+    ),
+    blockquote: ({ children }) => (
+      <blockquote className="my-8 border-s-2 border-accent ps-6 font-serif text-xl leading-8 text-muted italic">
+        {children}
+      </blockquote>
+    ),
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="my-6 list-disc space-y-2 ps-6 marker:text-muted">
+        {children}
+      </ul>
+    ),
+    number: ({ children }) => (
+      <ol className="my-6 list-decimal space-y-2 ps-6 marker:text-muted">
+        {children}
+      </ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }) => (
+      <li className="text-lg leading-8 text-foreground/90">{children}</li>
+    ),
+    number: ({ children }) => (
+      <li className="text-lg leading-8 text-foreground/90">{children}</li>
+    ),
+  },
+  marks: {
+    strong: ({ children }) => (
+      <strong className="font-semibold text-foreground">{children}</strong>
+    ),
+    em: ({ children }) => <em className="italic">{children}</em>,
+    code: ({ children }) => (
+      <code className="rounded-md bg-default px-1.5 py-0.5 font-mono text-[0.85em] text-foreground">
+        {children}
+      </code>
+    ),
+    link: BodyLink,
+  },
+  types: {
+    image: BodyImage,
+  },
+};
+
+export function PostBody({ value }: { value: PortableTextBlock[] }) {
+  return (
+    <div className="font-serif">
+      <PortableText components={components} value={value} />
+    </div>
+  );
+}
