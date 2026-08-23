@@ -128,3 +128,315 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* ------------------------------------------------------------------ */
+/* Reading mode (ported from the F15 Library reader)                   */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* Gelasio (loaded via @fontsource-variable/gelasio in the reader). */
+  --font-reading:
+    "Gelasio Variable", Gelasio, Georgia, "Times New Roman", serif;
+}
+
+/*
+ * The reader surface reads its palette from --reader-* variables.
+ * Without `data-reader-theme` on <html> it inherits the site theme;
+ * an explicit theme (light / sepia / dark) overrides it independently
+ * of site dark mode.
+ */
+.reader-root {
+  --reader-bg: var(--background);
+  --reader-fg: var(--foreground);
+  --reader-muted: var(--muted);
+  --reader-border: var(--separator);
+  background: var(--reader-bg);
+  color: var(--reader-fg);
+}
+
+html[data-reader-theme="light"] .reader-root {
+  --reader-bg: oklch(0.995 0 0);
+  --reader-fg: oklch(0.145 0 0);
+  --reader-muted: oklch(0.5 0 0);
+  --reader-border: oklch(0.922 0 0);
+  color-scheme: light;
+}
+
+html[data-reader-theme="sepia"] .reader-root {
+  --reader-bg: oklch(0.955 0.023 90);
+  --reader-fg: oklch(0.32 0.04 65);
+  --reader-muted: oklch(0.55 0.045 75);
+  --reader-border: oklch(0.885 0.03 88);
+  color-scheme: light;
+}
+
+html[data-reader-theme="dark"] .reader-root {
+  --reader-bg: oklch(0.145 0 0);
+  --reader-fg: oklch(0.93 0 0);
+  --reader-muted: oklch(0.708 0 0);
+  --reader-border: oklch(1 0 0 / 12%);
+  color-scheme: dark;
+}
+
+/* Body copy — size and family are driven by the prefs on <html>. */
+.reader-content {
+  font-family: var(--font-reading);
+  font-size: var(--reader-font-size, 18px);
+  line-height: 1.8;
+}
+
+html[data-reader-font="sans"] .reader-content {
+  font-family: var(--font-sans);
+}
+
+html[data-reader-font="mono"] .reader-content {
+  font-family:
+    ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+.reader-section-title {
+  margin-bottom: 1.2em;
+  font-size: 1.65em;
+  font-weight: 700;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* em-based rhythm so everything scales with the font-size pref. */
+.reader-content p {
+  margin-bottom: 1.1em;
+}
+
+.reader-content :is(h3, h4) {
+  margin: 1.6em 0 0.55em;
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.reader-content h3 {
+  font-size: 1.25em;
+}
+
+.reader-content h4 {
+  font-size: 1.1em;
+}
+
+.reader-content :is(ul, ol) {
+  margin: 0 0 1.1em;
+  padding-inline-start: 1.4em;
+}
+
+.reader-content ul {
+  list-style: disc;
+}
+
+.reader-content ol {
+  list-style: decimal;
+}
+
+.reader-content li {
+  margin-bottom: 0.4em;
+}
+
+.reader-content li::marker {
+  color: var(--reader-muted);
+}
+
+.reader-content blockquote {
+  margin: 1.5em 0;
+  border-inline-start: 2px solid
+    color-mix(in oklab, var(--accent) 55%, transparent);
+  padding-inline-start: 1em;
+  color: var(--reader-muted);
+  font-style: italic;
+}
+
+.reader-content a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--accent) 40%, transparent);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 150ms;
+}
+
+.reader-content a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.reader-content strong {
+  font-weight: 700;
+}
+
+.reader-content code {
+  border-radius: 0.375rem;
+  background: color-mix(in oklab, var(--reader-fg) 8%, transparent);
+  padding: 0.15em 0.4em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.reader-content figure {
+  margin: 1.8em 0;
+}
+
+.reader-content figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 0.625rem;
+  border: 1px solid var(--reader-border);
+}
+
+.reader-content figcaption {
+  margin-top: 0.75em;
+  text-align: center;
+  font-size: 0.8em;
+  color: var(--reader-muted);
+}
+
+/* Chrome (header / footer / settings) */
+.reader-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  color: var(--reader-muted);
+  cursor: pointer;
+  transition:
+    background-color 150ms,
+    color 150ms;
+}
+
+.reader-icon-btn:hover {
+  color: var(--reader-fg);
+  background: color-mix(in oklab, var(--reader-fg) 8%, transparent);
+}
+
+.reader-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  background: none;
+  color: var(--reader-muted);
+}
+
+/* Settings toggle while the panel is open. */
+.reader-icon-btn[aria-expanded="true"] {
+  color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+}
+
+.reader-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--reader-muted);
+  cursor: pointer;
+  transition:
+    background-color 150ms,
+    color 150ms;
+}
+
+.reader-nav-btn:hover:not(:disabled) {
+  color: var(--reader-fg);
+  background: color-mix(in oklab, var(--reader-fg) 8%, transparent);
+}
+
+.reader-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.reader-pill {
+  border: 1px solid var(--reader-border);
+  border-radius: 9999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.875rem;
+  color: var(--reader-muted);
+  cursor: pointer;
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    color 150ms;
+}
+
+.reader-pill:hover {
+  color: var(--reader-fg);
+}
+
+.reader-pill[aria-pressed="true"] {
+  border-color: color-mix(in oklab, var(--accent) 55%, transparent);
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.reader-slider {
+  accent-color: var(--accent);
+}
+
+:is(.reader-icon-btn, .reader-nav-btn, .reader-pill, .reader-swatch, .reader-slider):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Section + settings-panel transitions */
+@keyframes reader-slide-next {
+  from {
+    opacity: 0;
+    transform: translateX(2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes reader-slide-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-2.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reader-enter-next {
+  animation: reader-slide-next 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reader-enter-prev {
+  animation: reader-slide-prev 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes reader-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.375rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reader-panel {
+  animation: reader-panel-in 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reader-enter-next,
+  .reader-enter-prev,
+  .reader-panel {
+    animation: none;
+  }
+}

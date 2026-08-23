@@ -4,6 +4,7 @@ import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 
 import { SiteNavbar } from "@/components/site-navbar";
+import { READER_PREFS_PREPAINT_SCRIPT } from "@/lib/reader-prefs";
 import { siteConfig } from "@/lib/site";
 
 import { Providers } from "./providers";
@@ -53,6 +54,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         className="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased"
         id="top"
       >
+        {/* Applies stored reading-mode prefs before first paint (no flash). */}
+        <script
+          dangerouslySetInnerHTML={{ __html: READER_PREFS_PREPAINT_SCRIPT }}
+        />
         <Providers>
           <SiteNavbar />
           <main className="flex-1">{children}</main>
