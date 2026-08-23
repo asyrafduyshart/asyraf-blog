@@ -15,6 +15,3 @@ export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
  * Bump deliberately when you want to opt into newer GROQ/API behavior.
  */
 export const apiVersion = "2026-08-23";
-
-/** Hosted Sanity Studio for this project. */
-export const studioUrl = "https://asyraf-blog.sanity.studio";

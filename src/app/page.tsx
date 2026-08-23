@@ -51,18 +51,7 @@ export default async function HomePage() {
         ) : (
           <Card className="border border-dashed border-separator bg-transparent p-10 text-center shadow-none">
             <p className="text-lg font-medium">Belum ada tulisan.</p>
-            <p className="mt-2 text-muted">
-              Terbitkan post pertama lewat{" "}
-              <a
-                className="font-medium text-foreground underline decoration-accent/50 underline-offset-4 hover:text-accent"
-                href={siteConfig.studioUrl}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Sanity Studio
-              </a>
-              .
-            </p>
+            <p className="mt-2 text-muted">Tulisan baru akan muncul di sini.</p>
           </Card>
         )}
       </section>

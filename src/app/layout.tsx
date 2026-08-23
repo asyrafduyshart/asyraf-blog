@@ -58,17 +58,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 © {new Date().getFullYear()} {siteConfig.name} ·{" "}
                 {siteConfig.domain}
               </p>
-              <p className="flex items-center gap-1.5">
-                Konten dikelola di{" "}
-                <a
-                  className="font-medium text-foreground underline decoration-accent/50 underline-offset-4 transition-colors hover:text-accent"
-                  href={siteConfig.studioUrl}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Sanity Studio
-                </a>
-              </p>
             </div>
           </footer>
         </Providers>
