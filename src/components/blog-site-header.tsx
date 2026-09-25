@@ -35,10 +35,7 @@ export function BlogSiteHeader() {
   }, [pathname]);
 
   useEffect(() => {
-    if (!articleMode) {
-      setReadingProgress(0);
-      return;
-    }
+    if (!articleMode) return;
 
     const updateProgress = () => setReadingProgress(getReadingProgress());
     updateProgress();
