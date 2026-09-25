@@ -96,7 +96,10 @@ function FeaturedPost({ post }: { post: PostListItem }) {
             {post.excerpt}
           </p>
         ) : null}
-        <NextLink className="text-link-arrow mt-7 inline-flex" href={`/${post.slug}`}>
+        <NextLink
+          className="text-link-arrow mt-7 inline-flex min-h-11 items-center"
+          href={`/${post.slug}`}
+        >
           Baca tulisan <span aria-hidden>→</span>
         </NextLink>
       </div>
@@ -133,7 +136,7 @@ function SeriesShelf({ posts }: { posts: PostListItem[] }) {
                 style={{ transform: `rotate(${(index - 1) * 5}deg)` }}
               >
                 <Image
-                  alt={image.alt ?? post.title}
+                  alt=""
                   className="object-cover"
                   fill
                   sizes="84px"

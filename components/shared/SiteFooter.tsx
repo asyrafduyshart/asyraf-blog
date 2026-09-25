@@ -6,6 +6,11 @@ import {
 import { Wordmark } from "./Wordmark";
 
 export function SiteFooter({ site }: { site: "journal" | "blog" }) {
+  const resolveHereHref = (href: string) =>
+    site === "blog" && href.startsWith("https://blog.asyraf.ai")
+      ? href.replace("https://blog.asyraf.ai", "") || "/"
+      : href;
+
   return (
     <footer className="ay-footer">
       <div className="ay-shell ay-footer__grid">
@@ -17,28 +22,28 @@ export function SiteFooter({ site }: { site: "journal" | "blog" }) {
           </p>
         </div>
         <div className="ay-footer__links">
-          <div>
+          <nav aria-label="Di sini">
             <p className="ay-footer__label">Di sini</p>
             <ul>
               {footerHereLinks.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href}>{link.label}</a>
+                  <a href={resolveHereHref(link.href)}>{link.label}</a>
                 </li>
               ))}
             </ul>
-          </div>
-          <div>
+          </nav>
+          <nav aria-label="Di luar">
             <p className="ay-footer__label">Di luar</p>
             <ul>
               {footerElsewhereLinks.map((link) => (
                 <li key={link.label}>
                   <a href={link.href} rel="noopener noreferrer" target="_blank">
-                    {link.label}
+                    {link.label} <span aria-hidden>↗</span>
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         </div>
         <div className="ay-footer__colophon">
           <p>Made with paper grain / and stubborn taste.</p>

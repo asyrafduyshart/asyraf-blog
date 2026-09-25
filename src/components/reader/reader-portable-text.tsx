@@ -44,7 +44,13 @@ function ReaderLink({
   );
 }
 
-function ReaderImage({ value }: { value: SanityImage }) {
+function ReaderImage({
+  value,
+  fallbackAlt,
+}: {
+  value: SanityImage;
+  fallbackAlt: string;
+}) {
   if (!value?.asset) return null;
 
   const dimensions = value.asset.metadata?.dimensions;
@@ -56,7 +62,7 @@ function ReaderImage({ value }: { value: SanityImage }) {
   return (
     <figure>
       <Image
-        alt={value.alt ?? ""}
+        alt={value.alt ?? value.caption ?? fallbackAlt}
         blurDataURL={value.asset.metadata?.lqip ?? undefined}
         height={height}
         placeholder={value.asset.metadata?.lqip ? "blur" : "empty"}
@@ -78,7 +84,7 @@ function ReaderImage({ value }: { value: SanityImage }) {
 const baseComponents: Omit<PortableTextComponents, "types"> = {
   block: {
     normal: ({ children }) => <p>{children}</p>,
-    h2: ({ children }) => <h3>{children}</h3>,
+    h2: ({ children }) => <h2>{children}</h2>,
     h3: ({ children }) => <h3>{children}</h3>,
     h4: ({ children }) => <h4>{children}</h4>,
     blockquote: ({ children }) => <blockquote>{children}</blockquote>,
@@ -109,7 +115,14 @@ export function ReaderPortableText({
   const components: PortableTextComponents = {
     ...baseComponents,
     types: {
-      image: ReaderImage,
+      image: ({ value }: { value: SanityImage }) => (
+        <ReaderImage
+          fallbackAlt={
+            language === "en" ? "Article illustration" : "Ilustrasi artikel"
+          }
+          value={value}
+        />
+      ),
       promptSnippet: ({
         value: snippet,
       }: PortableTextTypeComponentProps<PromptSnippetBlock>) => (

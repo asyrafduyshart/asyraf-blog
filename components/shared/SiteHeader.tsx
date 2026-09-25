@@ -1,8 +1,19 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useSyncExternalStore } from "react";
 
 import { blogLinks, journalLinks, primaryLinks } from "../../design/site-links";
 
 import { Wordmark } from "./Wordmark";
+
+const subscribeToLocation = (onStoreChange: () => void) => {
+  window.addEventListener("popstate", onStoreChange);
+  return () => window.removeEventListener("popstate", onStoreChange);
+};
+
+const getPathname = () => window.location.pathname;
+const getServerPathname = () => "/";
 
 export function SiteHeader({
   site,
@@ -14,6 +25,11 @@ export function SiteHeader({
   tools?: ReactNode;
 }) {
   const indexLinks = site === "blog" ? blogLinks : journalLinks;
+  const pathname = useSyncExternalStore(
+    subscribeToLocation,
+    getPathname,
+    getServerPathname,
+  );
 
   return (
     <header className="ay-masthead">
@@ -52,13 +68,24 @@ export function SiteHeader({
             <ul>
               {indexLinks.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href}>{link.label}</a>
+                  <a
+                    aria-current={
+                      site === "blog" && link.href === pathname
+                        ? "page"
+                        : undefined
+                    }
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
                 </li>
               ))}
             </ul>
           </nav>
           <span className="ay-index__folio">
-            {folio ?? (site === "blog" ? "Tulisan" : "No. 01 / 2026")}
+            <span className="ay-index__folio-text">
+              {folio ?? (site === "blog" ? "Tulisan" : "No. 01 / 2026")}
+            </span>
             {tools}
           </span>
         </div>

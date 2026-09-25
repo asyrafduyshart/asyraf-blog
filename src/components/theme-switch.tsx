@@ -63,7 +63,7 @@ export function ThemeSwitch() {
   return (
     <button
       aria-label={isLight ? "Aktifkan mode gelap" : "Aktifkan mode terang"}
-      className="inline-flex size-11 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-default-soft hover:text-foreground"
+      className="inline-flex size-11 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-[var(--paper-soft)] hover:text-foreground"
       type="button"
       onClick={() => setTheme(isLight ? "dark" : "light")}
     >

@@ -99,6 +99,18 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
     postIndex >= 0 && postIndex < allPosts.length - 1
       ? allPosts[postIndex + 1]
       : null;
+  const footerLabels =
+    language === "en"
+      ? {
+          newer: "Newer",
+          older: "Older",
+          reply: "Something stuck? Reply on",
+        }
+      : {
+          newer: "Lebih baru",
+          older: "Lebih lama",
+          reply: "Ada yang nyangkut? Balas di",
+        };
 
   return (
     <article lang={language}>
@@ -167,7 +179,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
               width={1600}
             />
           <figcaption className="mt-3 text-[length:var(--step--1)] text-muted">
-            Gbr. 1 — {mainImage.caption ?? mainImage.alt ?? headline}
+            Gbr. sampul — {mainImage.caption ?? mainImage.alt ?? headline}
           </figcaption>
         </figure>
       ) : null}
@@ -188,13 +200,17 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
           <nav className="mt-10 grid gap-4 sm:grid-cols-2" aria-label="Tulisan lain">
             {newerPost ? (
               <NextLink className="border-t border-border py-5" href={`/${newerPost.slug}`}>
-                <span className="font-note text-[var(--ochre-ink)]">Sebelumnya</span>
+                <span className="font-note text-[var(--ochre-ink)]">
+                  {footerLabels.newer}
+                </span>
                 <strong className="mt-2 block font-heading text-xl">{newerPost.title}</strong>
               </NextLink>
             ) : <span />}
             {olderPost ? (
               <NextLink className="border-t border-border py-5 sm:text-right" href={`/${olderPost.slug}`}>
-                <span className="font-note text-[var(--ochre-ink)]">Berikutnya</span>
+                <span className="font-note text-[var(--ochre-ink)]">
+                  {footerLabels.older}
+                </span>
                 <strong className="mt-2 block font-heading text-xl">{olderPost.title}</strong>
               </NextLink>
             ) : null}
@@ -204,7 +220,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
               ← {language === "en" ? "All posts" : "Semua tulisan"}
             </NextLink>
             <p className="font-note text-[var(--ink-soft)]">
-              Ada yang nyangkut? Balas di{" "}
+              {footerLabels.reply}{" "}
               <a className="underline" href="https://x.com/AsyrafDuyshart">
                 X @asyrafduyshart
               </a>

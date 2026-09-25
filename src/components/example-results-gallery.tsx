@@ -29,7 +29,7 @@ function galleryLabels(language: PostLanguage) {
 }
 
 const LIGHTBOX_BUTTON_CLASS =
-  "inline-flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+  "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 /**
  * Responsive grid for `exampleResults` body blocks (title + intro +
@@ -157,7 +157,13 @@ export function ExampleResultsGallery({
                 onClick={() => setActiveIndex(index)}
               >
                 <Image
-                  alt={image.alt ?? caption ?? ""}
+                  alt={
+                    image.alt ??
+                    caption ??
+                    (language === "en"
+                      ? "Article illustration"
+                      : "Ilustrasi artikel")
+                  }
                   blurDataURL={image.asset.metadata?.lqip ?? undefined}
                   className={clsx(
                     "w-full object-cover",
@@ -189,7 +195,7 @@ export function ExampleResultsGallery({
                       : "mt-2 px-1 text-center text-[0.8125rem] leading-snug text-muted"
                   }
                 >
-                  Gbr. {index + 1} — {caption}
+                  Hasil {index + 1} — {caption}
                 </figcaption>
               ) : null}
             </figure>
@@ -226,7 +232,13 @@ export function ExampleResultsGallery({
             <figure className="flex min-h-0 flex-col items-center gap-3">
               <Image
                 key={active.asset._id}
-                alt={active.alt ?? active.caption ?? ""}
+                alt={
+                  active.alt ??
+                  active.caption ??
+                  (language === "en"
+                    ? "Article illustration"
+                    : "Ilustrasi artikel")
+                }
                 blurDataURL={active.asset.metadata?.lqip ?? undefined}
                 className="max-h-[78dvh] w-auto max-w-full object-contain"
                 height={activeHeight}

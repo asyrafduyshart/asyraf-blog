@@ -54,7 +54,13 @@ function BodyLink({
   );
 }
 
-function BodyImage({ value }: { value: SanityImage }) {
+function BodyImage({
+  value,
+  fallbackAlt,
+}: {
+  value: SanityImage;
+  fallbackAlt: string;
+}) {
   if (!value?.asset) return null;
 
   const dimensions = value.asset.metadata?.dimensions;
@@ -66,7 +72,7 @@ function BodyImage({ value }: { value: SanityImage }) {
   return (
     <figure className="article-figure my-12">
       <Image
-        alt={value.alt ?? ""}
+        alt={value.alt ?? value.caption ?? fallbackAlt}
         blurDataURL={value.asset.metadata?.lqip ?? undefined}
         className="w-full border border-border bg-surface"
         height={height}
@@ -156,7 +162,14 @@ export function PostBody({
   const components: PortableTextComponents = {
     ...baseComponents,
     types: {
-      image: BodyImage,
+      image: ({ value: image }: PortableTextTypeComponentProps<SanityImage>) => (
+        <BodyImage
+          fallbackAlt={
+            language === "en" ? "Article illustration" : "Ilustrasi artikel"
+          }
+          value={image}
+        />
+      ),
       promptSnippet: ({
         value: snippet,
       }: PortableTextTypeComponentProps<PromptSnippetBlock>) => (

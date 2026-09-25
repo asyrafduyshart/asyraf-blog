@@ -2,7 +2,7 @@
 
 Personal blog of **Asyraf**, live at [blog.asyraf.ai](https://blog.asyraf.ai).
 
-Built with [Next.js](https://nextjs.org) (App Router), [HeroUI](https://www.heroui.com), Tailwind CSS v4, and [Sanity](https://www.sanity.io) as the headless CMS.
+Built with [Next.js](https://nextjs.org) (App Router), Tailwind CSS v4, and [Sanity](https://www.sanity.io) as the headless CMS.
 
 ## Content lives in Sanity
 

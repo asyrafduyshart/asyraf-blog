@@ -50,23 +50,23 @@ export function ReaderSettings({
     {
       value: "light",
       label: labels.themeLight,
-      background: "oklch(0.995 0 0)",
-      foreground: "oklch(0.145 0 0)",
-      border: "oklch(0.885 0 0)",
+      background: "#f6f1e8",
+      foreground: "#2a2420",
+      border: "rgb(42 36 32 / .18)",
     },
     {
       value: "sepia",
       label: labels.themeSepia,
-      background: "oklch(0.955 0.023 90)",
-      foreground: "oklch(0.32 0.04 65)",
-      border: "oklch(0.86 0.032 88)",
+      background: "#e9dfd0",
+      foreground: "#2a2420",
+      border: "rgb(42 36 32 / .18)",
     },
     {
       value: "dark",
       label: labels.themeDark,
-      background: "oklch(0.185 0 0)",
-      foreground: "oklch(0.93 0 0)",
-      border: "oklch(0.35 0 0)",
+      background: "#231e1b",
+      foreground: "#f3ece2",
+      border: "rgb(243 236 226 / .14)",
     },
   ];
 
@@ -84,6 +84,7 @@ export function ReaderSettings({
       <div
         aria-label={labels.settings}
         className="reader-panel absolute inset-x-0 top-full z-20 border-b border-(--reader-border) bg-(--reader-bg) shadow-lg shadow-black/5"
+        id="reader-settings"
         role="group"
       >
         <div className="mx-auto flex max-w-2xl flex-col gap-5 px-6 py-5">
@@ -106,6 +107,7 @@ export function ReaderSettings({
                 <Minus aria-hidden size={16} />
               </button>
               <input
+                autoFocus
                 className="reader-slider h-1.5 min-w-0 flex-1"
                 id={sliderId}
                 max={READER_MAX_FONT_SIZE}
