@@ -58,15 +58,15 @@ export default async function CategoryPageRoute({
     <div className="page-shell pt-16 pb-[var(--section)] sm:pt-24">
       <header className="max-w-[var(--text)] border-b border-border pb-10">
         <p className="font-note text-base text-[var(--ochre-ink)]">Kategori</p>
-        <h1 className="mt-3 font-heading text-[var(--step-5)] leading-[1.02] font-semibold tracking-[-.03em] text-balance">
+        <h1 className="mt-3 font-heading text-[length:var(--step-5)] leading-[1.02] font-semibold tracking-[-.03em] text-balance">
           {category.title}
         </h1>
         {category.description ? (
-          <p className="mt-5 text-[var(--step-1)] leading-relaxed text-pretty text-muted">
+          <p className="mt-5 text-[length:var(--step-1)] leading-relaxed text-pretty text-muted">
             {category.description}
           </p>
         ) : null}
-        <p className="mt-5 text-[var(--step--1)] text-muted">{posts.length} tulisan</p>
+        <p className="mt-5 text-[length:var(--step--1)] text-muted">{posts.length} tulisan</p>
       </header>
 
       <section aria-label={`Tulisan dalam kategori ${category.title}`}>

@@ -32,7 +32,7 @@ export function PostRow({ post }: { post: PostListItem }) {
         />
       )}
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2 text-[var(--step--1)] text-muted">
+        <div className="flex flex-wrap items-center gap-2 text-[length:var(--step--1)] text-muted">
           <CategoryChips categories={post.categories?.slice(0, 1)} />
           {date && post.publishedAt ? (
             <time dateTime={post.publishedAt}>{date}</time>
@@ -40,7 +40,7 @@ export function PostRow({ post }: { post: PostListItem }) {
           <span aria-hidden>·</span>
           <span>{readingTimeLabel(post.estimatedReadingTime, language)}</span>
         </div>
-        <h3 className="mt-3 font-heading text-[var(--step-2)] leading-tight font-semibold tracking-[-0.02em]">
+        <h3 className="mt-3 font-heading text-[length:var(--step-2)] leading-tight font-semibold tracking-[-0.02em]">
           <NextLink
             className="decoration-[var(--rule-strong)] underline-offset-4 after:absolute after:inset-0 hover:underline hover:decoration-2 hover:decoration-[var(--ochre-deep)]"
             href={`/${post.slug}`}

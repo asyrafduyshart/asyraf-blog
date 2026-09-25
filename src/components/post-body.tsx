@@ -76,7 +76,7 @@ function BodyImage({ value }: { value: SanityImage }) {
         width={width}
       />
       {value.caption ? (
-        <figcaption className="mt-3 text-left text-[var(--step--1)] text-muted">
+        <figcaption className="mt-3 text-left text-[length:var(--step--1)] text-muted">
           {value.caption}
         </figcaption>
       ) : null}
@@ -89,7 +89,7 @@ const baseComponents: Omit<PortableTextComponents, "types"> = {
     normal: ({ children }) => <p className="mb-[1em] text-pretty">{children}</p>,
     h2: ({ children, value }) => (
       <h2
-        className="mt-[2.5em] mb-4 scroll-mt-24 font-heading text-[var(--step-3)] font-semibold tracking-[-.02em] text-foreground"
+        className="mt-[2.5em] mb-4 scroll-mt-24 font-heading text-[length:var(--step-3)] font-semibold tracking-[-.02em] text-foreground"
         id={headingId(value)}
       >
         {children}
@@ -97,19 +97,19 @@ const baseComponents: Omit<PortableTextComponents, "types"> = {
     ),
     h3: ({ children, value }) => (
       <h3
-        className="mt-[2em] mb-3 scroll-mt-24 font-heading text-[var(--step-2)] font-semibold tracking-[-.01em] text-foreground"
+        className="mt-[2em] mb-3 scroll-mt-24 font-heading text-[length:var(--step-2)] font-semibold tracking-[-.01em] text-foreground"
         id={headingId(value)}
       >
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="mt-8 mb-2 font-heading text-[var(--step-2)] font-semibold text-foreground">
+      <h4 className="mt-8 mb-2 font-heading text-[length:var(--step-2)] font-semibold text-foreground">
         {children}
       </h4>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="article-quote my-10 font-heading text-[var(--step-2)] leading-relaxed text-foreground italic">
+      <blockquote className="article-quote my-10 font-heading text-[length:var(--step-2)] leading-relaxed text-foreground italic">
         {children}
       </blockquote>
     ),
@@ -174,7 +174,7 @@ export function PostBody({
   // 1.75 line height, prose-width measure. Runs of consecutive images are
   // regrouped into example-results galleries before rendering.
   return (
-    <div className="article-prose mx-auto max-w-[var(--measure)] text-[var(--step-1)] leading-[1.7] text-foreground">
+    <div className="article-prose mx-auto max-w-[var(--measure)] text-[length:var(--step-1)] leading-[1.7] text-foreground">
       <PortableText
         components={components}
         value={groupConsecutiveImages(value)}

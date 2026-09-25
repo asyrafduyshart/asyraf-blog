@@ -71,12 +71,12 @@ function FeaturedPost({ post }: { post: PostListItem }) {
             />
           ) : null}
         </div>
-        <figcaption className="mt-3 text-[var(--step--1)] text-muted">
+        <figcaption className="mt-3 text-[length:var(--step--1)] text-muted">
           Gbr. 01 — Tulisan terbaru dari meja kerja.
         </figcaption>
       </figure>
       <div>
-        <p className="text-[var(--step--1)] text-muted">
+        <p className="text-[length:var(--step--1)] text-muted">
           {post.categories?.[0]?.title ?? "Catatan"} ·{" "}
           {date && post.publishedAt ? (
             <time dateTime={post.publishedAt}>{date}</time>
@@ -84,13 +84,13 @@ function FeaturedPost({ post }: { post: PostListItem }) {
           · {readingTimeLabel(post.estimatedReadingTime, language)}
         </p>
         <h2
-          className="mt-4 max-w-[18ch] font-heading text-[var(--step-4)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance"
+          className="mt-4 max-w-[18ch] font-heading text-[length:var(--step-4)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance"
           id="featured-heading"
         >
           {post.title}
         </h2>
         {post.excerpt ? (
-          <p className="mt-5 max-w-[55ch] text-[var(--step-1)] leading-relaxed text-muted">
+          <p className="mt-5 max-w-[55ch] text-[length:var(--step-1)] leading-relaxed text-muted">
             {post.excerpt}
           </p>
         ) : null}
@@ -110,7 +110,7 @@ function SeriesShelf({ posts }: { posts: PostListItem[] }) {
 
   return (
     <section aria-labelledby="series-heading">
-      <h2 className="font-heading text-[var(--step-3)] font-semibold" id="series-heading">
+      <h2 className="font-heading text-[length:var(--step-3)] font-semibold" id="series-heading">
         Seri di rak
       </h2>
       <div className="mt-7 grid gap-5 md:grid-cols-2">
@@ -137,7 +137,7 @@ function SeriesShelf({ posts }: { posts: PostListItem[] }) {
           </div>
           <div className="self-end">
             <p className="font-note text-[var(--ochre-soft)]">Travel sketchbook</p>
-            <h3 className="mt-2 font-heading text-[var(--step-3)] leading-tight">
+            <h3 className="mt-2 font-heading text-[length:var(--step-3)] leading-tight">
               Kota, poster, dan cara mesin membayangkannya.
             </h3>
             <span className="mt-5 inline-block font-semibold underline underline-offset-4">
@@ -151,7 +151,7 @@ function SeriesShelf({ posts }: { posts: PostListItem[] }) {
         >
           <p className="font-note text-[var(--paper-card)]">Prompt guides / AI Image</p>
           <div className="self-end">
-            <h3 className="font-heading text-[var(--step-3)] leading-tight">
+            <h3 className="font-heading text-[length:var(--step-3)] leading-tight">
               Template yang bisa dibongkar, bukan mantra.
             </h3>
             <p className="mt-4 max-w-[44ch] leading-relaxed">
@@ -208,13 +208,13 @@ export default async function HomePage() {
       >
         <div>
           <h1
-            className="max-w-[18ch] font-heading text-[var(--step-5)] leading-[.98] font-semibold tracking-[-.03em] text-balance"
+            className="max-w-[18ch] font-heading text-[length:var(--step-5)] leading-[.98] font-semibold tracking-[-.03em] text-balance"
             id="hero-heading"
           >
             <span>Di antara semua yang bisa dipilih,</span>{" "}
             <span className="text-[var(--ink-mute)]">kenapa masih di sini?</span>
           </h1>
-          <p className="mt-6 max-w-[46ch] text-[var(--step-1)] leading-relaxed text-pretty text-muted">
+          <p className="mt-6 max-w-[46ch] text-[length:var(--step-1)] leading-relaxed text-pretty text-muted">
             Bukan self-help. Lebih ke self-roast yang dibungkus seperti essay.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -254,7 +254,7 @@ export default async function HomePage() {
           className="scroll-mt-24"
           id="tulisan"
         >
-          <h2 className="font-heading text-[var(--step-4)] font-semibold tracking-[-.02em]">
+          <h2 className="font-heading text-[length:var(--step-4)] font-semibold tracking-[-.02em]">
             Semua tulisan
           </h2>
           <div className="mt-10">

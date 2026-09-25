@@ -104,7 +104,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
 
       <header className="page-shell pt-16 pb-12 sm:pt-24 sm:pb-16">
         <div className="max-w-[var(--text)]">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-[var(--step--1)] text-muted">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-[length:var(--step--1)] text-muted">
             <CategoryChips categories={post.categories?.slice(0, 1)} />
             {date && post.publishedAt ? (
               <>
@@ -117,12 +117,12 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
             <span>{readingTimeLabel(post.estimatedReadingTime, language)}</span>
             {language === "en" ? <span className="chip">{languageLabel(language)}</span> : null}
           </div>
-          <h1 className="mt-7 max-w-[20ch] font-heading text-[var(--step-5)] leading-[1.02] font-semibold tracking-[-.03em] text-balance">
+          <h1 className="mt-7 max-w-[20ch] font-heading text-[length:var(--step-5)] leading-[1.02] font-semibold tracking-[-.03em] text-balance">
             {headline}
           </h1>
 
           {subheadline ? (
-            <p className="mt-6 max-w-[60ch] text-[var(--step-1)] leading-relaxed text-muted text-pretty">
+            <p className="mt-6 max-w-[60ch] text-[length:var(--step-1)] leading-relaxed text-muted text-pretty">
               {subheadline}
             </p>
           ) : null}
@@ -164,7 +164,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
               src={urlFor(mainImage).width(1600).fit("max").url()}
               width={1600}
             />
-          <figcaption className="mt-3 text-[var(--step--1)] text-muted">
+          <figcaption className="mt-3 text-[length:var(--step--1)] text-muted">
             Gbr. 1 — {mainImage.caption ?? mainImage.alt ?? headline}
           </figcaption>
         </figure>
@@ -179,7 +179,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
       <footer className="mx-auto max-w-[var(--measure)] px-[var(--gutter)] pb-[var(--section)]">
         <div className="border-t border-border pt-8">
           {date ? (
-            <p className="text-[var(--step--1)] text-muted">
+            <p className="text-[length:var(--step--1)] text-muted">
               {language === "en" ? "Published" : "Diterbitkan"} {date} · BSD
             </p>
           ) : null}
