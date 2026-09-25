@@ -8,12 +8,22 @@ import { blogLinks, journalLinks, primaryLinks } from "../../design/site-links";
 import { Wordmark } from "./Wordmark";
 
 const subscribeToLocation = (onStoreChange: () => void) => {
+  const onLinkClick = (event: MouseEvent) => {
+    const target = event.target;
+    if (!(target instanceof Element) || !target.closest("a[href]")) return;
+    window.requestAnimationFrame(onStoreChange);
+  };
+
   window.addEventListener("popstate", onStoreChange);
-  return () => window.removeEventListener("popstate", onStoreChange);
+  document.addEventListener("click", onLinkClick);
+  return () => {
+    window.removeEventListener("popstate", onStoreChange);
+    document.removeEventListener("click", onLinkClick);
+  };
 };
 
 const getPathname = () => window.location.pathname;
-const getServerPathname = () => "/";
+const getServerPathname = () => "";
 
 export function SiteHeader({
   site,
