@@ -29,13 +29,14 @@ export function SiteHeader({
               const current =
                 (site === "journal" && link.label === "Journal") ||
                 (site === "blog" && link.label === "Tulisan");
+              const external = "external" in link && link.external;
               return (
                 <li key={link.label}>
                   <a
                     aria-current={current ? "page" : undefined}
                     href={link.href}
-                    rel={link.external ? "noreferrer" : undefined}
-                    target={link.external ? "_blank" : undefined}
+                    rel={external ? "noreferrer" : undefined}
+                    target={external ? "_blank" : undefined}
                   >
                     {link.label}
                   </a>
