@@ -32,7 +32,7 @@ export function SiteFooter({ site }: { site: "journal" | "blog" }) {
             <ul>
               {footerElsewhereLinks.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} rel="noreferrer" target="_blank">
+                  <a href={link.href} rel="noopener noreferrer" target="_blank">
                     {link.label}
                   </a>
                 </li>

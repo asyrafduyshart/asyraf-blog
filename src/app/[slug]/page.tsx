@@ -72,7 +72,14 @@ export async function generateMetadata({
 
 export default async function PostPage({ params }: PageProps<"/[slug]">) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const [post, allPosts] = await Promise.all([
+    getPost(slug),
+    client.fetch<PostListItem[]>(
+      POSTS_QUERY,
+      {},
+      { next: { revalidate: 60 } },
+    ),
+  ]);
 
   if (!post) {
     notFound();
@@ -86,11 +93,6 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
   const imageDimensions = mainImage?.asset?.metadata?.dimensions;
   // Reading mode is only offered when the body yields at least one section.
   const hasReaderSections = splitReaderSections(post.body).length > 0;
-  const allPosts = await client.fetch<PostListItem[]>(
-    POSTS_QUERY,
-    {},
-    { next: { revalidate: 60 } },
-  );
   const postIndex = allPosts.findIndex((item) => item.slug === post.slug);
   const newerPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
   const olderPost =

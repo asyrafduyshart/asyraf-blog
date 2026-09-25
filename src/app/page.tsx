@@ -54,27 +54,29 @@ function FeaturedPost({ post }: { post: PostListItem }) {
   return (
     <section
       aria-labelledby="featured-heading"
-      className="grid items-center gap-10 border-y border-border py-12 md:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)]"
+      className={
+        cover
+          ? "grid items-center gap-10 border-y border-border py-12 md:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)]"
+          : "border-y border-border py-12"
+      }
     >
-      <figure>
+      {cover ? <figure>
         <div className="paper-print relative aspect-[3/2]">
           <Tape />
-          {cover ? (
-            <Image
-              alt={cover.alt ?? post.title}
-              blurDataURL={cover.asset?.metadata?.lqip ?? undefined}
-              className="object-cover"
-              fill
-              placeholder={cover.asset?.metadata?.lqip ? "blur" : "empty"}
-              sizes="(max-width: 768px) 100vw, 52vw"
-              src={urlFor(cover).width(1200).height(800).fit("crop").url()}
-            />
-          ) : null}
+          <Image
+            alt={cover.alt ?? post.title}
+            blurDataURL={cover.asset?.metadata?.lqip ?? undefined}
+            className="object-cover"
+            fill
+            placeholder={cover.asset?.metadata?.lqip ? "blur" : "empty"}
+            sizes="(max-width: 768px) 100vw, 52vw"
+            src={urlFor(cover).width(1200).height(800).fit("crop").url()}
+          />
         </div>
         <figcaption className="mt-3 text-[length:var(--step--1)] text-muted">
           Gbr. 01 — Tulisan terbaru dari meja kerja.
         </figcaption>
-      </figure>
+      </figure> : null}
       <div>
         <p className="text-[length:var(--step--1)] text-muted">
           {post.categories?.[0]?.title ?? "Catatan"} ·{" "}
@@ -106,7 +108,12 @@ function SeriesShelf({ posts }: { posts: PostListItem[] }) {
   const imagePosts = posts.filter((post) =>
     post.categories?.some((category) => category.slug === "ai-image"),
   );
-  const covers = imagePosts.filter((post) => post.mainImage?.asset).slice(0, 3);
+  const covers = imagePosts
+    .flatMap((post) => {
+      const image = post.mainImage;
+      return image?.asset ? [{ image, post }] : [];
+    })
+    .slice(0, 3);
 
   return (
     <section aria-labelledby="series-heading">
@@ -116,21 +123,21 @@ function SeriesShelf({ posts }: { posts: PostListItem[] }) {
       <div className="mt-7 grid gap-5 md:grid-cols-2">
         <NextLink
           className="group grid min-h-80 overflow-hidden bg-[var(--ink)] p-7 text-[var(--paper-card)] no-underline sm:p-9"
-          href="/kategori/ai-image"
+          href="/prompt-guide-poster-travel-flat-vector"
         >
           <div className="flex h-28 items-start">
-            {covers.map((post, index) => (
+            {covers.map(({ image, post }, index) => (
               <div
                 className="relative -mr-8 aspect-[3/4] h-28 border border-[var(--paper-card)] bg-[var(--paper-soft)]"
                 key={post._id}
                 style={{ transform: `rotate(${(index - 1) * 5}deg)` }}
               >
                 <Image
-                  alt={post.mainImage?.alt ?? post.title}
+                  alt={image.alt ?? post.title}
                   className="object-cover"
                   fill
                   sizes="84px"
-                  src={urlFor(post.mainImage!).width(252).height(336).fit("crop").url()}
+                  src={urlFor(image).width(252).height(336).fit("crop").url()}
                 />
               </div>
             ))}
@@ -189,11 +196,14 @@ export default async function HomePage() {
 
   const postsByMonth = posts.reduce<Record<string, PostListItem[]>>(
     (groups, post) => {
-      const date = post.publishedAt ? new Date(post.publishedAt) : new Date(0);
-      const key = new Intl.DateTimeFormat("id-ID", {
-        month: "long",
-        year: "numeric",
-      }).format(date);
+      const date = post.publishedAt ? new Date(post.publishedAt) : null;
+      const key =
+        date && !Number.isNaN(date.getTime())
+          ? new Intl.DateTimeFormat("id-ID", {
+              month: "long",
+              year: "numeric",
+            }).format(date)
+          : "Tanpa tanggal";
       (groups[key] ??= []).push(post);
       return groups;
     },
@@ -265,7 +275,7 @@ export default async function HomePage() {
                 </h3>
                 <div>
                   {monthPosts.map((post) => (
-                    <PostRow key={post._id} post={post} />
+                    <PostRow headingLevel={4} key={post._id} post={post} />
                   ))}
                 </div>
               </section>

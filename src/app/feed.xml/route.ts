@@ -28,11 +28,18 @@ export async function GET() {
   const items = posts
     .map((post) => {
       const url = `${siteConfig.url}/${post.slug}`;
+      const publishedAt = post.publishedAt
+        ? new Date(post.publishedAt)
+        : null;
+      const pubDate =
+        publishedAt && !Number.isNaN(publishedAt.getTime())
+          ? publishedAt.toUTCString()
+          : null;
       return `<item>
   <title>${escapeXml(post.title)}</title>
-  <link>${url}</link>
-  <guid isPermaLink="true">${url}</guid>
-  ${post.publishedAt ? `<pubDate>${new Date(post.publishedAt).toUTCString()}</pubDate>` : ""}
+  <link>${escapeXml(url)}</link>
+  <guid isPermaLink="true">${escapeXml(url)}</guid>
+  ${pubDate ? `<pubDate>${pubDate}</pubDate>` : ""}
   ${post.excerpt ? `<description>${escapeXml(post.excerpt)}</description>` : ""}
 </item>`;
     })
@@ -43,7 +50,7 @@ export async function GET() {
 <rss version="2.0">
 <channel>
   <title>${escapeXml(siteConfig.title)}</title>
-  <link>${siteConfig.url}</link>
+  <link>${escapeXml(siteConfig.url)}</link>
   <description>${escapeXml(siteConfig.description)}</description>
   <language>id</language>
   ${items}

@@ -1,8 +1,9 @@
 export const primaryLinks = [
-  { label: "Journal", href: "https://asyraf.ai/" },
-  { label: "Tulisan", href: "https://blog.asyraf.ai/" },
-  { label: "Building", href: "https://asyraf.ai/#building" },
+  { id: "journal", label: "Journal", href: "https://asyraf.ai/" },
+  { id: "blog", label: "Tulisan", href: "https://blog.asyraf.ai/" },
+  { id: "building", label: "Building", href: "https://asyraf.ai/#building" },
   {
+    id: "x",
     label: "@asyrafduyshart ↗",
     href: "https://x.com/AsyrafDuyshart",
     external: true,
@@ -17,16 +18,16 @@ export const journalLinks = [
 ] as const;
 
 export const blogLinks = [
-  { label: "Semua", href: "https://blog.asyraf.ai/" },
-  { label: "Agent", href: "https://blog.asyraf.ai/kategori/agent" },
-  { label: "AI Image", href: "https://blog.asyraf.ai/kategori/ai-image" },
+  { label: "Semua", href: "/" },
+  { label: "Agent", href: "/kategori/agent" },
+  { label: "AI Image", href: "/kategori/ai-image" },
   {
     label: "Keputusan",
-    href: "https://blog.asyraf.ai/kategori/keputusan",
+    href: "/kategori/keputusan",
   },
   {
     label: "Second brain",
-    href: "https://blog.asyraf.ai/kategori/second-brain",
+    href: "/kategori/second-brain",
   },
 ] as const;
 

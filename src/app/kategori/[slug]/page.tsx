@@ -73,7 +73,7 @@ export default async function CategoryPageRoute({
         {posts.length > 0 ? (
           <div className="mt-10 max-w-4xl">
             {posts.map((post) => (
-              <PostRow key={post._id} post={post} />
+              <PostRow headingLevel={2} key={post._id} post={post} />
             ))}
           </div>
         ) : (

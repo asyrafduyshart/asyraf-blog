@@ -6,7 +6,13 @@ import { formatDate, readingTimeLabel } from "@/lib/text";
 import { urlFor } from "@/sanity/image";
 import type { PostListItem } from "@/sanity/types";
 
-export function PostRow({ post }: { post: PostListItem }) {
+export function PostRow({
+  post,
+  headingLevel = 3,
+}: {
+  post: PostListItem;
+  headingLevel?: 2 | 3 | 4;
+}) {
   const language = post.language ?? "id";
   const date = formatDate(post.publishedAt ?? undefined, language);
   const cover = post.mainImage?.asset ? post.mainImage : null;
@@ -40,14 +46,34 @@ export function PostRow({ post }: { post: PostListItem }) {
           <span aria-hidden>·</span>
           <span>{readingTimeLabel(post.estimatedReadingTime, language)}</span>
         </div>
-        <h3 className="mt-3 font-heading text-[length:var(--step-2)] leading-tight font-semibold tracking-[-0.02em]">
+        {headingLevel === 2 ? (
+          <h2 className="mt-3 font-heading text-[length:var(--step-2)] leading-tight font-semibold tracking-[-0.02em]">
+            <NextLink
+              className="decoration-[var(--rule-strong)] underline-offset-4 after:absolute after:inset-0 hover:underline hover:decoration-2 hover:decoration-[var(--ochre-deep)]"
+              href={`/${post.slug}`}
+            >
+              {post.title}
+            </NextLink>
+          </h2>
+        ) : headingLevel === 4 ? (
+          <h4 className="mt-3 font-heading text-[length:var(--step-2)] leading-tight font-semibold tracking-[-0.02em]">
+            <NextLink
+              className="decoration-[var(--rule-strong)] underline-offset-4 after:absolute after:inset-0 hover:underline hover:decoration-2 hover:decoration-[var(--ochre-deep)]"
+              href={`/${post.slug}`}
+            >
+              {post.title}
+            </NextLink>
+          </h4>
+        ) : (
+          <h3 className="mt-3 font-heading text-[length:var(--step-2)] leading-tight font-semibold tracking-[-0.02em]">
           <NextLink
             className="decoration-[var(--rule-strong)] underline-offset-4 after:absolute after:inset-0 hover:underline hover:decoration-2 hover:decoration-[var(--ochre-deep)]"
             href={`/${post.slug}`}
           >
             {post.title}
           </NextLink>
-        </h3>
+          </h3>
+        )}
         {post.excerpt ? (
           <p className="mt-2 line-clamp-1 text-base leading-relaxed text-muted">
             {post.excerpt}
