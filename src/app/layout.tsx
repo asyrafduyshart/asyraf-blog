@@ -1,26 +1,35 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Architects_Daughter, Fraunces, Karla } from "next/font/google";
 
 import "./globals.css";
 
-import { SiteNavbar } from "@/components/site-navbar";
-import { SocialLinks } from "@/components/social-links";
+import { SiteFooter } from "../../components/shared/SiteFooter";
+import { SiteHeader } from "../../components/shared/SiteHeader";
+import { ThemeSwitch } from "@/components/theme-switch";
 import { READER_PREFS_PREPAINT_SCRIPT } from "@/lib/reader-prefs";
 import { siteConfig } from "@/lib/site";
 
 import { Providers } from "./providers";
 
-const inter = Inter({
+const karla = Karla({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
   display: "swap",
 });
 
 const fraunces = Fraunces({
   subsets: ["latin", "latin-ext"],
   style: ["normal", "italic"],
-  axes: ["opsz"],
-  variable: "--font-fraunces",
+  axes: ["opsz", "SOFT"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const architectsDaughter = Architects_Daughter({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-sketch",
   display: "swap",
 });
 
@@ -47,7 +56,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      className={`${inter.variable} ${fraunces.variable}`}
+      className={`${karla.variable} ${fraunces.variable} ${architectsDaughter.variable}`}
       lang={siteConfig.defaultLanguage}
       suppressHydrationWarning
     >
@@ -60,29 +69,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: READER_PREFS_PREPAINT_SCRIPT }}
         />
         <Providers>
-          <SiteNavbar />
-          <main className="flex-1">{children}</main>
-          <footer className="border-t border-border">
-            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-muted sm:flex-row">
-              <p>
-                © {new Date().getFullYear()} {siteConfig.name} ·{" "}
-                {siteConfig.domain}
-              </p>
-              <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-2">
-                <SocialLinks />
-                <span
-                  aria-hidden
-                  className="hidden h-5 w-px bg-border sm:block"
-                />
-                <a
-                  className="rounded-full px-3 py-1.5 transition-colors hover:bg-default-soft hover:text-foreground"
-                  href="#top"
-                >
-                  Kembali ke atas ↑
-                </a>
-              </div>
-            </div>
-          </footer>
+          <SiteHeader site="blog" tools={<ThemeSwitch />} />
+          <main className="flex-1" id="main-content">
+            {children}
+          </main>
+          <SiteFooter site="blog" />
         </Providers>
       </body>
     </html>

@@ -1,9 +1,8 @@
-import { Card } from "@heroui/react";
 import type { Metadata } from "next";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
 
-import { PostCard } from "@/components/post-card";
+import { PostRow } from "@/components/post-row";
 import { client } from "@/sanity/client";
 import { CATEGORY_PAGE_QUERY, CATEGORY_SLUGS_QUERY } from "@/sanity/queries";
 import type { CategoryPage, CategorySlug } from "@/sanity/types";
@@ -56,45 +55,41 @@ export default async function CategoryPageRoute({
   const { posts } = category;
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-6 pt-8 pb-24 sm:pt-12">
-      <header className="max-w-2xl">
-        <p className="text-xs font-semibold tracking-[0.25em] text-accent uppercase">
-          Kategori
-        </p>
-        <h1 className="mt-3 font-heading text-4xl leading-[1.05] font-medium tracking-tight text-balance sm:text-5xl">
+    <div className="page-shell pt-16 pb-[var(--section)] sm:pt-24">
+      <header className="max-w-[var(--text)] border-b border-border pb-10">
+        <p className="font-note text-base text-[var(--ochre-ink)]">Kategori</p>
+        <h1 className="mt-3 font-heading text-[var(--step-5)] leading-[1.02] font-semibold tracking-[-.03em] text-balance">
           {category.title}
         </h1>
         {category.description ? (
-          <p className="mt-4 text-lg leading-8 text-pretty text-muted">
+          <p className="mt-5 text-[var(--step-1)] leading-relaxed text-pretty text-muted">
             {category.description}
           </p>
         ) : null}
-        <p className="mt-4 text-sm text-muted">
-          {posts.length} tulisan
-        </p>
+        <p className="mt-5 text-[var(--step--1)] text-muted">{posts.length} tulisan</p>
       </header>
 
       <section aria-label={`Tulisan dalam kategori ${category.title}`}>
         {posts.length > 0 ? (
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="mt-10 max-w-4xl">
             {posts.map((post) => (
-              <PostCard key={post._id} post={post} />
+              <PostRow key={post._id} post={post} />
             ))}
           </div>
         ) : (
-          <Card className="mt-10 rounded-lg border border-dashed border-border bg-transparent p-10 text-center shadow-none">
+          <div className="mt-10 border border-dashed border-border p-10 text-center">
             <p className="text-lg font-medium">
               Belum ada tulisan dalam kategori ini.
             </p>
             <p className="mt-2 text-muted">
               Tulisan baru akan muncul di sini.
             </p>
-          </Card>
+          </div>
         )}
       </section>
 
       <NextLink
-        className="mt-12 inline-flex items-center gap-2 rounded-full text-sm font-medium text-muted transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        className="text-link-arrow mt-12 inline-flex min-h-11 items-center gap-2"
         href="/"
       >
         <span aria-hidden>←</span>

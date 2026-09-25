@@ -1,7 +1,5 @@
 "use client";
 
-import "@fontsource-variable/gelasio";
-
 import { ChevronLeft, ChevronRight, Settings2, X } from "lucide-react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";

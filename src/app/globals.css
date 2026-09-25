@@ -1,138 +1,79 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+@import "../../design/asyraf-tokens.css";
+@import "../../design/asyraf-chrome.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-heading:
-    var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
-  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-display);
+  --font-serif: var(--font-display);
+  --font-mono: var(--font-code);
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-surface: var(--paper-card);
+  --color-muted: var(--ink-mute);
+  --color-accent: var(--ochre-deep);
+  --color-accent-hover: var(--ochre-ink);
+  --color-border: var(--rule);
+  --color-separator: var(--rule);
 }
 
-/*
- * Design tokens adapted from the F15 Library design system:
- * neutral gray surfaces, hairline borders, one calm sea-slate teal
- * accent (#3D6B75 → oklch(0.4989 0.0528 213.2), hover #335A63) and a
- * 0.625rem base radius. Dark mode lightens the same teal family
- * (#7CAEB9) so accent text keeps WCAG AA contrast on dark surfaces.
- *
- * These override HeroUI's default theme variables, so both HeroUI
- * components and the `bg-surface` / `text-accent` / `border-border`
- * utilities pick them up. `--accent-hover` is pinned here because
- * HeroUI's derived hover (accent + 10% foreground) would drift lighter
- * instead of deepening toward #335A63.
- */
 :root {
-  --radius: 0.625rem;
-
-  --background: oklch(0.9881 0 0);
-  --foreground: oklch(0.145 0 0);
-
-  --surface: oklch(1 0 0);
-  --surface-foreground: var(--foreground);
-  --surface-secondary: oklch(0.97 0 0);
-  --surface-secondary-foreground: var(--foreground);
-  --surface-tertiary: oklch(0.9373 0 0);
-  --surface-tertiary-foreground: var(--foreground);
-
-  --overlay: oklch(1 0 0);
-  --overlay-foreground: var(--foreground);
-
-  --muted: oklch(0.556 0 0);
-
-  --default: oklch(0.955 0 0);
-  --default-foreground: oklch(0.205 0 0);
-
-  /* #3D6B75 — white text on this fill: 5.9:1 (AA). Hover: #335A63. */
-  --accent: oklch(0.4989 0.0528 213.2);
-  --accent-hover: oklch(0.4424 0.0465 214.17);
-  --accent-foreground: oklch(1 0 0);
-
-  --field-background: oklch(1 0 0);
-  --field-foreground: var(--foreground);
-
-  --segment: oklch(1 0 0);
-  --segment-foreground: var(--foreground);
-
-  --border: oklch(0.922 0 0);
-  --separator: oklch(0.922 0 0);
+  --background: var(--paper); --foreground: var(--ink);
+  --surface: var(--paper-card); --surface-foreground: var(--ink);
+  --surface-secondary: var(--paper-soft); --surface-secondary-foreground: var(--ink);
+  --surface-tertiary: var(--paper-deep); --surface-tertiary-foreground: var(--ink);
+  --overlay: var(--paper-card); --overlay-foreground: var(--ink);
+  --muted: var(--ink-mute); --default: var(--paper-soft); --default-foreground: var(--ink);
+  --accent: var(--ochre-deep); --accent-hover: var(--ochre-ink); --accent-foreground: var(--paper-card);
+  --field-background: var(--paper-card); --field-foreground: var(--ink);
+  --segment: var(--paper-card); --segment-foreground: var(--ink);
+  --border: var(--rule); --separator: var(--rule); --radius: 2px;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-
-  --surface: oklch(0.205 0 0);
-  --surface-foreground: var(--foreground);
-  --surface-secondary: oklch(0.245 0 0);
-  --surface-secondary-foreground: var(--foreground);
-  --surface-tertiary: oklch(0.269 0 0);
-  --surface-tertiary-foreground: var(--foreground);
-
-  --overlay: oklch(0.205 0 0);
-  --overlay-foreground: var(--foreground);
-
-  --muted: oklch(0.708 0 0);
-
-  --default: oklch(0.269 0 0);
-  --default-foreground: var(--foreground);
-
-  /*
-   * Same sea-slate hue, lightened to #7CAEB9 (hover #8ABCC8) so accent
-   * links/chips stay ≥ 6.2:1 on dark surfaces; filled CTAs therefore
-   * carry near-black text (8.1:1) instead of white.
-   */
-  --accent: oklch(0.72 0.055 213);
-  --accent-hover: oklch(0.765 0.055 213);
-  --accent-foreground: oklch(0.145 0 0);
-
-  --field-background: oklch(0.205 0 0);
-  --field-foreground: var(--foreground);
-
-  --segment: oklch(0.32 0 0);
-  --segment-foreground: var(--foreground);
-
-  --border: oklch(1 0 0 / 10%);
-  --separator: oklch(1 0 0 / 10%);
+  --background: var(--paper); --foreground: var(--ink);
+  --surface: var(--paper-card); --surface-foreground: var(--ink);
+  --surface-secondary: var(--paper-soft); --surface-secondary-foreground: var(--ink);
+  --surface-tertiary: var(--paper-deep); --surface-tertiary-foreground: var(--ink);
+  --overlay: var(--paper-card); --overlay-foreground: var(--ink);
+  --muted: var(--ink-mute); --default: var(--paper-soft); --default-foreground: var(--ink);
+  --accent: var(--ochre-deep); --accent-hover: var(--ochre-ink); --accent-foreground: var(--paper);
+  --field-background: var(--paper-card); --field-foreground: var(--ink);
+  --segment: var(--paper-soft); --segment-foreground: var(--ink);
+  --border: var(--rule); --separator: var(--rule);
 }
 
-/* Restrained accent glow used behind post heroes — primary at low opacity. */
-.hero-surface {
-  background:
-    radial-gradient(
-      52rem 30rem at 85% -12%,
-      color-mix(in oklab, var(--accent) 10%, transparent),
-      transparent 62%
-    ),
-    radial-gradient(
-      40rem 24rem at 0% 115%,
-      color-mix(in oklab, var(--accent) 6%, transparent),
-      transparent 60%
-    );
-}
-
-::selection {
-  background: color-mix(in oklab, var(--accent) 25%, transparent);
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-/* Keep the page still while the gallery lightbox (modal <dialog>) is open. */
-body:has(dialog:modal) {
-  overflow: hidden;
-}
+* { box-sizing:border-box; }
+html { background:var(--paper); }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); }
+body::before { content:""; position:fixed; inset:0; z-index:var(--z-grain); pointer-events:none; opacity:.045; mix-blend-mode:multiply; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"); }
+::selection { background:var(--ochre-soft); color:var(--ink); }
+a,button { transition:color var(--dur-fast) var(--ease-out),background-color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out); }
+:focus-visible { outline:3px solid var(--ochre-deep); outline-offset:4px; }
+h1,h2 { overflow-wrap:anywhere; }
+body:has(dialog:modal) { overflow:hidden; }
+.button-solid,.button-paper { display:inline-flex; min-height:44px; align-items:center; justify-content:center; gap:8px; border-radius:var(--radius-pill); padding:0 20px; font-size:.875rem; font-weight:600; text-decoration:none; }
+.button-solid { background:var(--ink); color:var(--paper-card); }
+.button-paper { border:1px solid var(--ink); background:var(--paper-card); color:var(--ink); }
+.text-link-arrow { color:var(--ochre-ink); font-weight:600; text-decoration:underline; text-underline-offset:.3em; }
+.chip { display:inline-flex; min-height:32px; align-items:center; border-radius:var(--radius-pill); padding:0 10px; background:var(--ochre-wash); color:var(--ochre-ink); font-size:var(--step--1); font-weight:600; text-decoration:none; }
+.font-note { font-family:var(--font-note); }
+.paper-print { position:relative; border:1px solid var(--rule); background:var(--paper-card); box-shadow:0 1px 0 rgb(42 36 32 / .04),0 4px 16px rgb(42 36 32 / .05); }
+.page-shell { width:min(100%,var(--page)); margin-inline:auto; padding-inline:var(--gutter); }
+.article-prose { counter-reset:figure; }
+.article-figure { counter-increment:figure; }
+.article-figure figcaption::before { content:"Gbr. " counter(figure) " — "; }
+.article-quote::before { content:""; display:block; width:10px; height:10px; margin-bottom:18px; border-radius:50%; background:var(--ochre); }
 
 /* ------------------------------------------------------------------ */
 /* Reading mode (ported from the F15 Library reader)                   */
 /* ------------------------------------------------------------------ */
 
 :root {
-  /* Gelasio (loaded via @fontsource-variable/gelasio in the reader). */
-  --font-reading:
-    "Gelasio Variable", Gelasio, Georgia, "Times New Roman", serif;
+  --font-reading: var(--font-display);
 }
 
 /*
@@ -151,26 +92,26 @@ body:has(dialog:modal) {
 }
 
 html[data-reader-theme="light"] .reader-root {
-  --reader-bg: oklch(0.995 0 0);
-  --reader-fg: oklch(0.145 0 0);
-  --reader-muted: oklch(0.5 0 0);
-  --reader-border: oklch(0.922 0 0);
+  --reader-bg: #f6f1e8;
+  --reader-fg: #2a2420;
+  --reader-muted: #71675f;
+  --reader-border: rgb(42 36 32 / .18);
   color-scheme: light;
 }
 
 html[data-reader-theme="sepia"] .reader-root {
-  --reader-bg: oklch(0.955 0.023 90);
-  --reader-fg: oklch(0.32 0.04 65);
-  --reader-muted: oklch(0.55 0.045 75);
-  --reader-border: oklch(0.885 0.03 88);
+  --reader-bg: #e9dfd0;
+  --reader-fg: #2a2420;
+  --reader-muted: #5c534c;
+  --reader-border: rgb(42 36 32 / .18);
   color-scheme: light;
 }
 
 html[data-reader-theme="dark"] .reader-root {
-  --reader-bg: oklch(0.145 0 0);
-  --reader-fg: oklch(0.93 0 0);
-  --reader-muted: oklch(0.708 0 0);
-  --reader-border: oklch(1 0 0 / 12%);
+  --reader-bg: #231e1b;
+  --reader-fg: #f3ece2;
+  --reader-muted: #c4b8ab;
+  --reader-border: rgb(243 236 226 / .14);
   color-scheme: dark;
 }
 
@@ -281,13 +222,13 @@ html[data-reader-font="mono"] .reader-content {
 .reader-content figure img {
   width: 100%;
   height: auto;
-  border-radius: 0.625rem;
+  border-radius: 0;
   border: 1px solid var(--reader-border);
 }
 
 .reader-content figcaption {
   margin-top: 0.75em;
-  text-align: center;
+  text-align: left;
   font-size: 0.8em;
   color: var(--reader-muted);
 }
@@ -453,9 +394,20 @@ html[data-reader-font="mono"] .reader-content {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior:auto; }
+  *,*::before,*::after { transition-duration:.01ms !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; }
   .reader-enter-next,
   .reader-enter-prev,
   .reader-panel {
     animation: none;
   }
+}
+
+@media (prefers-reduced-transparency: reduce), print {
+  body::before { display:none; }
+}
+
+@media print {
+  .ay-masthead,.ay-footer { display:none; }
+  a[href^="http"]::after { content:" (" attr(href) ")"; font-size:.8em; }
 }

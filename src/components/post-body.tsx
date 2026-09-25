@@ -64,11 +64,11 @@ function BodyImage({ value }: { value: SanityImage }) {
     : Math.round((width * 9) / 16);
 
   return (
-    <figure className="my-10 sm:my-12">
+    <figure className="article-figure my-12">
       <Image
         alt={value.alt ?? ""}
         blurDataURL={value.asset.metadata?.lqip ?? undefined}
-        className="w-full rounded-lg border border-border bg-surface"
+        className="w-full border border-border bg-surface"
         height={height}
         placeholder={value.asset.metadata?.lqip ? "blur" : "empty"}
         sizes="(max-width: 768px) 100vw, 672px"
@@ -76,7 +76,7 @@ function BodyImage({ value }: { value: SanityImage }) {
         width={width}
       />
       {value.caption ? (
-        <figcaption className="mt-3 text-center text-sm text-muted">
+        <figcaption className="mt-3 text-left text-[var(--step--1)] text-muted">
           {value.caption}
         </figcaption>
       ) : null}
@@ -86,10 +86,10 @@ function BodyImage({ value }: { value: SanityImage }) {
 
 const baseComponents: Omit<PortableTextComponents, "types"> = {
   block: {
-    normal: ({ children }) => <p className="mb-6 text-pretty">{children}</p>,
+    normal: ({ children }) => <p className="mb-[1em] text-pretty">{children}</p>,
     h2: ({ children, value }) => (
       <h2
-        className="mt-12 mb-3 scroll-mt-24 font-heading text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
+        className="mt-[2.5em] mb-4 scroll-mt-24 font-heading text-[var(--step-3)] font-semibold tracking-[-.02em] text-foreground"
         id={headingId(value)}
       >
         {children}
@@ -97,31 +97,31 @@ const baseComponents: Omit<PortableTextComponents, "types"> = {
     ),
     h3: ({ children, value }) => (
       <h3
-        className="mt-10 mb-3 scroll-mt-24 font-heading text-xl font-semibold tracking-tight text-foreground sm:text-2xl"
+        className="mt-[2em] mb-3 scroll-mt-24 font-heading text-[var(--step-2)] font-semibold tracking-[-.01em] text-foreground"
         id={headingId(value)}
       >
         {children}
       </h3>
     ),
     h4: ({ children }) => (
-      <h4 className="mt-8 mb-2 font-heading text-lg font-semibold tracking-tight text-foreground">
+      <h4 className="mt-8 mb-2 font-heading text-[var(--step-2)] font-semibold text-foreground">
         {children}
       </h4>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="my-8 border-s-2 border-accent/40 ps-4 text-muted italic">
+      <blockquote className="article-quote my-10 font-heading text-[var(--step-2)] leading-relaxed text-foreground italic">
         {children}
       </blockquote>
     ),
   },
   list: {
     bullet: ({ children }) => (
-      <ul className="my-6 list-disc space-y-2 ps-6 marker:text-muted">
+      <ul className="my-6 list-disc space-y-2 ps-6 marker:text-[var(--ochre)]">
         {children}
       </ul>
     ),
     number: ({ children }) => (
-      <ol className="my-6 list-decimal space-y-2 ps-6 marker:text-muted">
+      <ol className="my-6 list-decimal space-y-2 ps-6 marker:font-heading marker:text-[var(--ochre-ink)]">
         {children}
       </ol>
     ),
@@ -136,7 +136,7 @@ const baseComponents: Omit<PortableTextComponents, "types"> = {
     ),
     em: ({ children }) => <em className="italic">{children}</em>,
     code: ({ children }) => (
-      <code className="rounded-md bg-default px-1.5 py-0.5 font-mono text-[0.85em] text-foreground">
+      <code className="rounded-[2px] bg-default px-1.5 py-0.5 font-mono text-[0.9em] text-foreground">
         {children}
       </code>
     ),
@@ -174,7 +174,7 @@ export function PostBody({
   // 1.75 line height, prose-width measure. Runs of consecutive images are
   // regrouped into example-results galleries before rendering.
   return (
-    <div className="mx-auto max-w-prose text-lg leading-[1.75] text-foreground/90">
+    <div className="article-prose mx-auto max-w-[var(--measure)] text-[var(--step-1)] leading-[1.7] text-foreground">
       <PortableText
         components={components}
         value={groupConsecutiveImages(value)}

@@ -1,9 +1,8 @@
-import { Card } from "@heroui/react";
 import Image from "next/image";
 import NextLink from "next/link";
 
-import { PostCard } from "@/components/post-card";
-import { SocialLinks } from "@/components/social-links";
+import { Tape } from "../../components/shared/Tape";
+import { PostRow } from "@/components/post-row";
 import { formatDate, readingTimeLabel } from "@/lib/text";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
@@ -31,12 +30,12 @@ function ArrowRightIcon({ className }: { className?: string }) {
   );
 }
 
-/* Woodcut portrait beside the hero — B&W engraving, square to balance the grid. */
 function HeroPortrait() {
   return (
-    <div className="relative hidden aspect-square overflow-hidden rounded-2xl border border-border lg:block">
+    <div className="paper-print relative mx-auto aspect-square w-full max-w-md -rotate-[1.5deg] p-3 lg:block">
+      <Tape />
       <Image
-        alt="Potret woodcut hitam-putih"
+        alt="Potret woodcut Asyraf Duyshart"
         className="object-cover"
         fill
         priority
@@ -55,58 +54,115 @@ function FeaturedPost({ post }: { post: PostListItem }) {
   return (
     <section
       aria-labelledby="featured-heading"
-      className="rounded-2xl border border-border bg-surface px-6 py-8 sm:px-10 sm:py-10"
+      className="grid items-center gap-10 border-y border-border py-12 md:grid-cols-[minmax(0,1.05fr)_minmax(0,.95fr)]"
     >
-      <div className="flex flex-col items-center gap-8 sm:flex-row sm:gap-10">
-        {cover ? (
-          <div className="relative w-40 shrink-0 sm:w-48">
-            <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border">
-              <Image
-                alt={cover.alt ?? post.title}
-                blurDataURL={cover.asset?.metadata?.lqip ?? undefined}
-                className="object-cover"
-                fill
-                placeholder={cover.asset?.metadata?.lqip ? "blur" : "empty"}
-                sizes="192px"
-                src={urlFor(cover).width(576).height(768).fit("crop").url()}
-              />
-            </div>
-          </div>
-        ) : null}
-
-        <div className="min-w-0 flex-1 text-center sm:text-left">
-          <p className="text-xs font-semibold tracking-wider text-muted uppercase">
-            Tulisan terbaru
-          </p>
-          <h2
-            className="mt-2 font-heading text-2xl leading-tight font-medium tracking-tight text-balance sm:text-3xl"
-            id="featured-heading"
-          >
-            {post.title}
-          </h2>
-          <p className="mt-1 text-sm text-muted sm:text-base">
-            {date && post.publishedAt ? (
-              <>
-                <time dateTime={post.publishedAt}>{date}</time>
-                <span aria-hidden className="mx-2 opacity-50">
-                  ·
-                </span>
-              </>
-            ) : null}
-            {readingTimeLabel(post.estimatedReadingTime, language)}
-          </p>
-          {post.excerpt ? (
-            <p className="mt-4 line-clamp-3 text-sm text-muted sm:text-base">
-              {post.excerpt}
-            </p>
+      <figure>
+        <div className="paper-print relative aspect-[3/2]">
+          <Tape />
+          {cover ? (
+            <Image
+              alt={cover.alt ?? post.title}
+              blurDataURL={cover.asset?.metadata?.lqip ?? undefined}
+              className="object-cover"
+              fill
+              placeholder={cover.asset?.metadata?.lqip ? "blur" : "empty"}
+              sizes="(max-width: 768px) 100vw, 52vw"
+              src={urlFor(cover).width(1200).height(800).fit("crop").url()}
+            />
           ) : null}
-          <NextLink
-            className="mt-6 inline-flex h-10 items-center justify-center rounded-full bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            href={`/${post.slug}`}
-          >
-            Baca sekarang
-          </NextLink>
         </div>
+        <figcaption className="mt-3 text-[var(--step--1)] text-muted">
+          Gbr. 01 — Tulisan terbaru dari meja kerja.
+        </figcaption>
+      </figure>
+      <div>
+        <p className="text-[var(--step--1)] text-muted">
+          {post.categories?.[0]?.title ?? "Catatan"} ·{" "}
+          {date && post.publishedAt ? (
+            <time dateTime={post.publishedAt}>{date}</time>
+          ) : null}{" "}
+          · {readingTimeLabel(post.estimatedReadingTime, language)}
+        </p>
+        <h2
+          className="mt-4 max-w-[18ch] font-heading text-[var(--step-4)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance"
+          id="featured-heading"
+        >
+          {post.title}
+        </h2>
+        {post.excerpt ? (
+          <p className="mt-5 max-w-[55ch] text-[var(--step-1)] leading-relaxed text-muted">
+            {post.excerpt}
+          </p>
+        ) : null}
+        <NextLink className="text-link-arrow mt-7 inline-flex" href={`/${post.slug}`}>
+          Baca tulisan <span aria-hidden>→</span>
+        </NextLink>
+      </div>
+    </section>
+  );
+}
+
+function SeriesShelf({ posts }: { posts: PostListItem[] }) {
+  const imagePosts = posts.filter((post) =>
+    post.categories?.some((category) => category.slug === "ai-image"),
+  );
+  const covers = imagePosts.filter((post) => post.mainImage?.asset).slice(0, 3);
+
+  return (
+    <section aria-labelledby="series-heading">
+      <h2 className="font-heading text-[var(--step-3)] font-semibold" id="series-heading">
+        Seri di rak
+      </h2>
+      <div className="mt-7 grid gap-5 md:grid-cols-2">
+        <NextLink
+          className="group grid min-h-80 overflow-hidden bg-[var(--ink)] p-7 text-[var(--paper-card)] no-underline sm:p-9"
+          href="/kategori/ai-image"
+        >
+          <div className="flex h-28 items-start">
+            {covers.map((post, index) => (
+              <div
+                className="relative -mr-8 aspect-[3/4] h-28 border border-[var(--paper-card)] bg-[var(--paper-soft)]"
+                key={post._id}
+                style={{ transform: `rotate(${(index - 1) * 5}deg)` }}
+              >
+                <Image
+                  alt={post.mainImage?.alt ?? post.title}
+                  className="object-cover"
+                  fill
+                  sizes="84px"
+                  src={urlFor(post.mainImage!).width(252).height(336).fit("crop").url()}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="self-end">
+            <p className="font-note text-[var(--ochre-soft)]">Travel sketchbook</p>
+            <h3 className="mt-2 font-heading text-[var(--step-3)] leading-tight">
+              Kota, poster, dan cara mesin membayangkannya.
+            </h3>
+            <span className="mt-5 inline-block font-semibold underline underline-offset-4">
+              Lihat seri →
+            </span>
+          </div>
+        </NextLink>
+        <NextLink
+          className="group grid min-h-80 bg-[var(--terracotta-deep)] p-7 text-[var(--paper-card)] no-underline sm:p-9"
+          href="/kategori/ai-image"
+        >
+          <p className="font-note text-[var(--paper-card)]">Prompt guides / AI Image</p>
+          <div className="self-end">
+            <h3 className="font-heading text-[var(--step-3)] leading-tight">
+              Template yang bisa dibongkar, bukan mantra.
+            </h3>
+            <p className="mt-4 max-w-[44ch] leading-relaxed">
+              Komposisi, kota, dan catatan produksi untuk membuat gambar yang
+              punya arah.
+            </p>
+            <span className="mt-5 inline-block font-semibold underline underline-offset-4">
+              Lihat seri →
+            </span>
+          </div>
+        </NextLink>
       </div>
     </section>
   );
@@ -131,27 +187,40 @@ export default async function HomePage() {
         : `${minRead}–${maxRead} menit baca`
       : null;
 
+  const postsByMonth = posts.reduce<Record<string, PostListItem[]>>(
+    (groups, post) => {
+      const date = post.publishedAt ? new Date(post.publishedAt) : new Date(0);
+      const key = new Intl.DateTimeFormat("id-ID", {
+        month: "long",
+        year: "numeric",
+      }).format(date);
+      (groups[key] ??= []).push(post);
+      return groups;
+    },
+    {},
+  );
+
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-14 px-6 pt-8 pb-24 sm:pt-12">
+    <div className="page-shell space-y-[var(--section)] pt-12 pb-[var(--section)] sm:pt-20">
       <section
         aria-labelledby="hero-heading"
-        className="grid items-center gap-10 lg:grid-cols-[7fr_5fr] lg:gap-6"
+        className="grid items-center gap-12 lg:grid-cols-[7fr_5fr] lg:gap-16"
       >
-        <div className="lg:pr-6">
+        <div>
           <h1
-            className="font-heading text-[clamp(2.5rem,6vw+0.5rem,4.25rem)] leading-[0.98] font-medium tracking-[-0.025em] text-balance text-foreground"
+            className="max-w-[18ch] font-heading text-[var(--step-5)] leading-[.98] font-semibold tracking-[-.03em] text-balance"
             id="hero-heading"
           >
-            Di antara semua yang bisa dipilih, kenapa masih di sini?
+            <span>Di antara semua yang bisa dipilih,</span>{" "}
+            <span className="text-[var(--ink-mute)]">kenapa masih di sini?</span>
           </h1>
-          <p className="mt-5 max-w-[46ch] text-base text-pretty text-muted sm:text-lg">
+          <p className="mt-6 max-w-[46ch] text-[var(--step-1)] leading-relaxed text-pretty text-muted">
             Bukan self-help. Lebih ke self-roast yang dibungkus seperti essay.
           </p>
-
-          <div className="mt-7 flex flex-wrap items-center gap-x-2 gap-y-3">
+          <div className="mt-8 flex flex-wrap items-center gap-4">
             {latest ? (
               <NextLink
-                className="inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="button-solid"
                 href={`/${latest.slug}`}
               >
                 Baca tulisan terbaru
@@ -159,25 +228,16 @@ export default async function HomePage() {
               </NextLink>
             ) : null}
             <a
-              className="inline-flex h-11 items-center gap-2 rounded-full px-4 text-sm font-medium text-foreground transition-colors hover:bg-default-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="text-link-arrow inline-flex min-h-11 items-center"
               href="#tulisan"
             >
               Semua tulisan
             </a>
-            <span
-              aria-hidden
-              className="mx-1 hidden h-5 w-px bg-border sm:block"
-            />
-            <SocialLinks />
           </div>
-
           {readingRange ? (
-            <p className="mt-5 text-sm text-muted">
+            <p className="font-note mt-6 text-base text-[var(--ink-soft)]">
               {posts.length} tulisan
-              <span aria-hidden className="mx-2 opacity-50">
-                ·
-              </span>
-              {readingRange}
+              <span aria-hidden> · </span>{readingRange}
             </p>
           ) : null}
         </div>
@@ -186,31 +246,37 @@ export default async function HomePage() {
       </section>
 
       {latest ? <FeaturedPost post={latest} /> : null}
+      <SeriesShelf posts={posts} />
 
       {posts.length > 0 ? (
         <section
           aria-label="Daftar tulisan"
-          className="scroll-mt-24 space-y-4"
+          className="scroll-mt-24"
           id="tulisan"
         >
-          <div className="flex items-end justify-between gap-4">
-            <h2 className="font-heading text-xl font-semibold tracking-tight sm:text-2xl">
-              Semua tulisan
-            </h2>
-            <span className="text-sm text-muted">{posts.length} tulisan</span>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {posts.map((post) => (
-              <PostCard key={post._id} post={post} />
+          <h2 className="font-heading text-[var(--step-4)] font-semibold tracking-[-.02em]">
+            Semua tulisan
+          </h2>
+          <div className="mt-10">
+            {Object.entries(postsByMonth).map(([month, monthPosts]) => (
+              <section className="grid gap-6 md:grid-cols-[160px_1fr]" key={month}>
+                <h3 className="font-note pt-7 text-lg text-[var(--ochre-ink)]">
+                  {month}
+                </h3>
+                <div>
+                  {monthPosts.map((post) => (
+                    <PostRow key={post._id} post={post} />
+                  ))}
+                </div>
+              </section>
             ))}
           </div>
         </section>
       ) : (
-        <Card className="rounded-lg border border-dashed border-border bg-transparent p-10 text-center shadow-none">
+        <div className="border border-dashed border-border p-10 text-center">
           <p className="text-lg font-medium">Belum ada tulisan.</p>
           <p className="mt-2 text-muted">Tulisan baru akan muncul di sini.</p>
-        </Card>
+        </div>
       )}
     </div>
   );
