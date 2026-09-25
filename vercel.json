@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://asyraf.ai/blog",
+      "statusCode": 301
+    },
+    {
+      "source": "/kategori/:slug",
+      "destination": "https://asyraf.ai/blog/kategori/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/feed.xml",
+      "destination": "https://asyraf.ai/blog/feed.xml",
+      "statusCode": 301
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://asyraf.ai/sitemap.xml",
+      "statusCode": 301
+    },
+    {
+      "source": "/:slug/read",
+      "destination": "https://asyraf.ai/blog/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/:slug/read/:section",
+      "destination": "https://asyraf.ai/blog/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/:slug((?!robots\\.txt$)[^/]+)",
+      "destination": "https://asyraf.ai/blog/:slug",
+      "statusCode": 301
+    },
+    {
+      "source": "/:path((?!robots\\.txt$).*)",
+      "destination": "https://asyraf.ai/blog",
+      "statusCode": 301
+    }
+  ]
+}
