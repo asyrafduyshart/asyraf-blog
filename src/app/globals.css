@@ -421,6 +421,6 @@ html[data-reader-font="mono"] .reader-content {
 }
 
 @media print {
-  .ay-masthead,.ay-footer { display:none; }
+  .ay-skip-link,.ay-masthead,.ay-index-wrap,.ay-footer { display:none; }
   a[href^="http"]::after { content:" (" attr(href) ")"; font-size:.8em; }
 }

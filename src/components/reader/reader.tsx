@@ -165,7 +165,9 @@ export function Reader({
     const root = document.documentElement;
     const previousOverflow = root.style.overflow;
     const background = Array.from(
-      document.querySelectorAll<HTMLElement>(".ay-masthead, .ay-footer"),
+      document.querySelectorAll<HTMLElement>(
+        ".ay-skip-link, .ay-masthead, .ay-index-wrap, .ay-footer",
+      ),
     );
     root.style.overflow = "hidden";
     background.forEach((element) => {

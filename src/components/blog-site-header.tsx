@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import SiteHeader from "@/components/shared/SiteHeader";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -11,6 +11,11 @@ type ArticleContext = {
   category?: SiteLink;
   isArticle: boolean;
   pathname: string;
+};
+
+type ProgressState = {
+  pathname: string;
+  value: number;
 };
 
 function getReadingProgress() {
@@ -25,33 +30,59 @@ export function BlogSiteHeader() {
     isArticle: false,
     pathname: "",
   });
-  const [readingProgress, setReadingProgress] = useState(0);
+  const [progress, setProgress] = useState<ProgressState>({
+    pathname: "",
+    value: 0,
+  });
   const articleCategory =
     articleContext.pathname === pathname ? articleContext.category : undefined;
   const articleMode =
     articleContext.pathname === pathname && articleContext.isArticle;
+  const readingProgress = progress.pathname === pathname ? progress.value : 0;
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
+    let frame = 0;
+    const main = document.querySelector("#main-content");
+
+    const syncArticleContext = () => {
       const article = document.querySelector<HTMLElement>(
         "article[data-article-page]",
       );
+      const matchesPath = article?.dataset.articlePath === pathname;
       const label = article?.dataset.articleCategoryLabel;
       const href = article?.dataset.articleCategoryHref;
       setArticleContext({
-        category: label && href ? { href, label } : undefined,
-        isArticle: Boolean(article),
+        category: matchesPath && label && href ? { href, label } : undefined,
+        isArticle: matchesPath,
         pathname,
       });
-    });
+      if (matchesPath) observer.disconnect();
+    };
 
-    return () => window.cancelAnimationFrame(frame);
+    const observer = new MutationObserver(() => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(syncArticleContext);
+    });
+    if (main) observer.observe(main, { childList: true, subtree: true });
+    frame = window.requestAnimationFrame(syncArticleContext);
+
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+    };
   }, [pathname]);
 
   useEffect(() => {
     if (!articleMode) return;
 
-    const updateProgress = () => setReadingProgress(getReadingProgress());
+    const updateProgress = () => {
+      const value = Math.round(getReadingProgress() * 1000) / 1000;
+      setProgress((current) =>
+        current.pathname === pathname && current.value === value
+          ? current
+          : { pathname, value },
+      );
+    };
     updateProgress();
     window.addEventListener("scroll", updateProgress, { passive: true });
     window.addEventListener("resize", updateProgress);
@@ -61,21 +92,17 @@ export function BlogSiteHeader() {
     };
   }, [articleMode, pathname]);
 
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      document.querySelectorAll<HTMLAnchorElement>(".ay-index-link").forEach(
-        (link) => {
-          const linkPath = new URL(link.href, window.location.origin).pathname;
-          const current =
-            linkPath === pathname ||
-            (pathname === "/" && linkPath === "/kategori");
-          if (current) link.setAttribute("aria-current", "page");
-          else link.removeAttribute("aria-current");
-        },
-      );
-    });
-
-    return () => window.cancelAnimationFrame(frame);
+  useLayoutEffect(() => {
+    document.querySelectorAll<HTMLAnchorElement>(".ay-index-link").forEach(
+      (link) => {
+        const linkPath = new URL(link.href, window.location.origin).pathname;
+        const current =
+          linkPath === pathname ||
+          (pathname === "/" && linkPath === "/kategori");
+        if (current) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      },
+    );
   }, [pathname, articleMode]);
 
   return (
