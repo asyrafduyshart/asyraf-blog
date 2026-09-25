@@ -63,7 +63,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body
         className="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased"
-        id="top"
       >
         {/* Applies stored reading-mode prefs before first paint (no flash). */}
         <script

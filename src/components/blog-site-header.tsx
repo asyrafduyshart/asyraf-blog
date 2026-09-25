@@ -7,6 +7,12 @@ import SiteHeader from "@/components/shared/SiteHeader";
 import { ThemeSwitch } from "@/components/theme-switch";
 import type { SiteLink } from "@/design/site-links";
 
+type ArticleContext = {
+  category?: SiteLink;
+  isArticle: boolean;
+  pathname: string;
+};
+
 function getReadingProgress() {
   const scrollable =
     document.documentElement.scrollHeight - window.innerHeight;
@@ -15,20 +21,28 @@ function getReadingProgress() {
 
 export function BlogSiteHeader() {
   const pathname = usePathname();
-  const [articleCategory, setArticleCategory] = useState<SiteLink>();
+  const [articleContext, setArticleContext] = useState<ArticleContext>({
+    isArticle: false,
+    pathname: "",
+  });
   const [readingProgress, setReadingProgress] = useState(0);
+  const articleCategory =
+    articleContext.pathname === pathname ? articleContext.category : undefined;
   const articleMode =
-    pathname.split("/").filter(Boolean).length === 1 &&
-    pathname !== "/kategori";
+    articleContext.pathname === pathname && articleContext.isArticle;
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
       const article = document.querySelector<HTMLElement>(
-        "article[data-article-category-label]",
+        "article[data-article-page]",
       );
       const label = article?.dataset.articleCategoryLabel;
       const href = article?.dataset.articleCategoryHref;
-      setArticleCategory(label && href ? { href, label } : undefined);
+      setArticleContext({
+        category: label && href ? { href, label } : undefined,
+        isArticle: Boolean(article),
+        pathname,
+      });
     });
 
     return () => window.cancelAnimationFrame(frame);
@@ -45,7 +59,7 @@ export function BlogSiteHeader() {
       window.removeEventListener("scroll", updateProgress);
       window.removeEventListener("resize", updateProgress);
     };
-  }, [articleMode]);
+  }, [articleMode, pathname]);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {

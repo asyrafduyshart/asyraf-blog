@@ -120,6 +120,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
           : undefined
       }
       data-article-category-label={post.categories?.[0]?.title ?? undefined}
+      data-article-page=""
       lang={language}
     >
       <HtmlLang lang={language} />
