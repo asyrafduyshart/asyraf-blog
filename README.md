@@ -73,7 +73,7 @@ The Sanity API version is hard-coded to `2026-08-23` in `src/sanity/env.ts`.
 src/
 ├── app/
 │   ├── layout.tsx        # Root layout: fonts, providers, navbar, footer
-│   ├── page.tsx          # Blog index (HeroUI cards)
+│   ├── page.tsx          # Blog index (journal ledger + featured spread)
 │   ├── [slug]/page.tsx   # Post page with magazine hero + Portable Text body
 │   ├── sitemap.ts        # /sitemap.xml from Sanity slugs
 │   └── robots.ts         # /robots.txt
