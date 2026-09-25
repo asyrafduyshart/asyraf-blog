@@ -55,7 +55,7 @@ export function ThemeSwitch() {
   const { resolvedTheme, setTheme } = useTheme();
 
   if (!isHydrated) {
-    return <span aria-hidden className="size-9" />;
+    return <span aria-hidden className="size-11" />;
   }
 
   const isLight = resolvedTheme === "light";
@@ -63,7 +63,7 @@ export function ThemeSwitch() {
   return (
     <button
       aria-label={isLight ? "Aktifkan mode gelap" : "Aktifkan mode terang"}
-      className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-default-soft hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="inline-flex size-11 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-[var(--paper-soft)] hover:text-foreground"
       type="button"
       onClick={() => setTheme(isLight ? "dark" : "light")}
     >

@@ -1,4 +1,3 @@
-import { Chip, Separator } from "@heroui/react";
 import { BookOpen } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -8,13 +7,14 @@ import { notFound } from "next/navigation";
 import { CategoryChips } from "@/components/category-chips";
 import { HtmlLang } from "@/components/html-lang";
 import { PostBody } from "@/components/post-body";
+import Tape from "@/components/shared/Tape";
 import { splitReaderSections } from "@/lib/reader-sections";
 import { siteConfig } from "@/lib/site";
 import { formatDate, languageLabel, readingTimeLabel } from "@/lib/text";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
-import { POST_QUERY, POST_SLUGS_QUERY } from "@/sanity/queries";
-import type { Post, PostSlug } from "@/sanity/types";
+import { POSTS_QUERY, POST_QUERY, POST_SLUGS_QUERY } from "@/sanity/queries";
+import type { Post, PostListItem, PostSlug } from "@/sanity/types";
 
 export const revalidate = 60;
 
@@ -72,7 +72,14 @@ export async function generateMetadata({
 
 export default async function PostPage({ params }: PageProps<"/[slug]">) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const [post, allPosts] = await Promise.all([
+    getPost(slug),
+    client.fetch<PostListItem[]>(
+      POSTS_QUERY,
+      {},
+      { next: { revalidate: 60 } },
+    ),
+  ]);
 
   if (!post) {
     notFound();
@@ -86,15 +93,43 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
   const imageDimensions = mainImage?.asset?.metadata?.dimensions;
   // Reading mode is only offered when the body yields at least one section.
   const hasReaderSections = splitReaderSections(post.body).length > 0;
+  const postIndex = allPosts.findIndex((item) => item.slug === post.slug);
+  const newerPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
+  const olderPost =
+    postIndex >= 0 && postIndex < allPosts.length - 1
+      ? allPosts[postIndex + 1]
+      : null;
+  const footerLabels =
+    language === "en"
+      ? {
+          newer: "Newer",
+          older: "Older",
+          reply: "Something stuck? Reply on",
+        }
+      : {
+          newer: "Lebih baru",
+          older: "Lebih lama",
+          reply: "Ada yang nyangkut? Balas di",
+        };
 
   return (
-    <article lang={language}>
+    <article
+      data-article-category-href={
+        post.categories?.[0]
+          ? `/kategori/${post.categories[0].slug}`
+          : undefined
+      }
+      data-article-category-label={post.categories?.[0]?.title ?? undefined}
+      data-article-page=""
+      data-article-path={`/${post.slug}`}
+      lang={language}
+    >
       <HtmlLang lang={language} />
 
-      {/* Magazine-style hero with a restrained accent glow */}
-      <header className="hero-surface border-b border-separator">
-        <div className="mx-auto flex max-w-4xl flex-col items-center px-6 pt-16 pb-14 text-center sm:pt-24 sm:pb-20">
-          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-sm text-muted">
+      <header className="page-shell pt-16 pb-12 sm:pt-24 sm:pb-16">
+        <div className="max-w-[var(--text)]">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-[length:var(--step--1)] text-muted">
+            <CategoryChips categories={post.categories?.slice(0, 1)} />
             {date && post.publishedAt ? (
               <>
                 <time dateTime={post.publishedAt}>{date}</time>
@@ -104,85 +139,103 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
               </>
             ) : null}
             <span>{readingTimeLabel(post.estimatedReadingTime, language)}</span>
-            <Chip color="accent" size="sm" variant="soft">
-              <Chip.Label>{languageLabel(language)}</Chip.Label>
-            </Chip>
+            {language === "en" ? <span className="chip">{languageLabel(language)}</span> : null}
           </div>
-
-          <CategoryChips
-            categories={post.categories}
-            className="mt-4 justify-center"
-          />
-
-          <h1 className="mt-8 font-heading text-[clamp(2.25rem,4.5vw+1rem,3.75rem)] leading-[1.02] font-medium tracking-[-0.02em] text-balance">
+          <h1 className="mt-7 max-w-[20ch] font-heading text-[length:var(--step-5)] leading-[1.02] font-semibold tracking-[-.03em] text-balance">
             {headline}
           </h1>
 
           {subheadline ? (
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted text-pretty sm:text-xl sm:leading-9">
+            <p className="mt-6 max-w-[60ch] text-[length:var(--step-1)] leading-relaxed text-muted text-pretty">
               {subheadline}
             </p>
           ) : null}
 
-          {hasReaderSections ? (
-            <NextLink
-              className="mt-8 inline-flex h-11 items-center gap-2 rounded-full bg-accent px-6 text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              href={`/${post.slug}/read`}
-            >
-              <BookOpen aria-hidden size={16} strokeWidth={1.75} />
-              {language === "en" ? "Reading mode" : "Mode baca"}
-            </NextLink>
-          ) : null}
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Image
+              alt="Potret Asyraf Duyshart"
+              className="size-9 rounded-full border border-border object-cover"
+              height={36}
+              src="/images/hero-portrait.png"
+              width={36}
+            />
+            <p className="text-sm text-[var(--ink-soft)]">Asyraf Duyshart · BSD</p>
+            {hasReaderSections ? (
+              <NextLink className="button-paper" href={`/${post.slug}/read`}>
+                <BookOpen aria-hidden size={16} strokeWidth={1.75} />
+                {language === "en" ? "Reading mode" : "Mode baca"}
+              </NextLink>
+            ) : null}
+          </div>
         </div>
       </header>
 
       {mainImage ? (
-        <figure className="mx-auto -mt-10 max-w-4xl px-6 sm:-mt-14">
+        <figure className="paper-print relative mx-auto max-w-[var(--wide)] p-3">
+          <Tape className="blog-tape-top" />
           <Image
-            priority
-            alt={mainImage.alt ?? headline}
-            blurDataURL={mainImage.asset?.metadata?.lqip ?? undefined}
-            className="w-full rounded-lg border border-border bg-surface"
-            height={
-              imageDimensions?.aspectRatio
-                ? Math.round(1600 / imageDimensions.aspectRatio)
-                : 900
-            }
-            placeholder={mainImage.asset?.metadata?.lqip ? "blur" : "empty"}
-            sizes="(max-width: 896px) 100vw, 896px"
-            src={urlFor(mainImage).width(1600).fit("max").url()}
-            width={1600}
-          />
-          {mainImage.caption ? (
-            <figcaption className="mt-3 text-center text-sm text-muted">
-              {mainImage.caption}
-            </figcaption>
-          ) : null}
+              priority
+              alt={mainImage.alt ?? headline}
+              blurDataURL={mainImage.asset?.metadata?.lqip ?? undefined}
+              className="h-auto w-full"
+              height={
+                imageDimensions?.aspectRatio
+                  ? Math.round(1600 / imageDimensions.aspectRatio)
+                  : 900
+              }
+              placeholder={mainImage.asset?.metadata?.lqip ? "blur" : "empty"}
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              src={urlFor(mainImage).width(1600).fit("max").url()}
+              width={1600}
+            />
+          <figcaption className="mt-3 text-[length:var(--step--1)] text-muted">
+            Gbr. sampul — {mainImage.caption ?? mainImage.alt ?? headline}
+          </figcaption>
         </figure>
       ) : null}
 
-      {/* Long-form body */}
-      <div className="mx-auto max-w-2xl px-6 pt-14 pb-10 sm:pt-16">
+      <div className="mx-auto max-w-[var(--measure)] px-[var(--gutter)] pt-16 pb-12 sm:pt-24">
         {post.body && post.body.length > 0 ? (
           <PostBody language={language} value={post.body} />
         ) : null}
       </div>
 
-      <footer className="mx-auto max-w-2xl px-6 pb-24">
-        <Separator className="mb-8" />
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <NextLink
-            className="inline-flex items-center gap-2 rounded-full text-sm font-medium text-muted transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-            href="/"
-          >
-            <span aria-hidden>←</span>
-            {language === "en" ? "All posts" : "Semua tulisan"}
-          </NextLink>
+      <footer className="mx-auto max-w-[var(--measure)] px-[var(--gutter)] pb-[var(--section)]">
+        <div className="border-t border-border pt-8">
           {date ? (
-            <p className="text-sm text-muted">
-              {language === "en" ? "Published" : "Diterbitkan"} {date}
+            <p className="text-[length:var(--step--1)] text-muted">
+              {language === "en" ? "Published" : "Diterbitkan"} {date} · BSD
             </p>
           ) : null}
+          <nav className="mt-10 grid gap-4 sm:grid-cols-2" aria-label="Tulisan lain">
+            {newerPost ? (
+              <NextLink className="border-t border-border py-5" href={`/${newerPost.slug}`}>
+                <span className="font-note text-[var(--ochre-ink)]">
+                  {footerLabels.newer}
+                </span>
+                <strong className="mt-2 block font-heading text-xl">{newerPost.title}</strong>
+              </NextLink>
+            ) : <span />}
+            {olderPost ? (
+              <NextLink className="border-t border-border py-5 sm:text-right" href={`/${olderPost.slug}`}>
+                <span className="font-note text-[var(--ochre-ink)]">
+                  {footerLabels.older}
+                </span>
+                <strong className="mt-2 block font-heading text-xl">{olderPost.title}</strong>
+              </NextLink>
+            ) : null}
+          </nav>
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-5">
+            <NextLink className="text-link-arrow inline-flex min-h-11 items-center" href="/">
+              ← {language === "en" ? "All posts" : "Semua tulisan"}
+            </NextLink>
+            <p className="font-note text-[var(--ink-soft)]">
+              {footerLabels.reply}{" "}
+              <a className="underline" href="https://x.com/AsyrafDuyshart">
+                X @asyrafduyshart
+              </a>
+            </p>
+          </div>
         </div>
       </footer>
     </article>

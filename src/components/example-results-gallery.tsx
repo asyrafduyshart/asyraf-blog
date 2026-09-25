@@ -29,7 +29,7 @@ function galleryLabels(language: PostLanguage) {
 }
 
 const LIGHTBOX_BUTTON_CLASS =
-  "inline-flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
+  "inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white";
 
 /**
  * Responsive grid for `exampleResults` body blocks (title + intro +
@@ -148,7 +148,7 @@ export function ExampleResultsGallery({
                   tileLabel ? `${labels.expand} — ${tileLabel}` : labels.expand
                 }
                 className={clsx(
-                  "group block w-full cursor-zoom-in overflow-hidden rounded-[0.625rem] border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+                  "group block w-full cursor-zoom-in overflow-hidden border transition-colors",
                   isReader
                     ? "border-(--reader-border)"
                     : "border-border bg-surface hover:border-accent/50",
@@ -157,10 +157,16 @@ export function ExampleResultsGallery({
                 onClick={() => setActiveIndex(index)}
               >
                 <Image
-                  alt={image.alt ?? caption ?? ""}
+                  alt={
+                    image.alt ??
+                    caption ??
+                    (language === "en"
+                      ? "Article illustration"
+                      : "Ilustrasi artikel")
+                  }
                   blurDataURL={image.asset.metadata?.lqip ?? undefined}
                   className={clsx(
-                    "w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100",
+                    "w-full object-cover",
                     // Uniform 3:4 poster tiles; a lone image keeps its ratio.
                     !isSingle && "aspect-3/4",
                   )}
@@ -189,7 +195,7 @@ export function ExampleResultsGallery({
                       : "mt-2 px-1 text-center text-[0.8125rem] leading-snug text-muted"
                   }
                 >
-                  {caption}
+                  Hasil {index + 1} — {caption}
                 </figcaption>
               ) : null}
             </figure>
@@ -200,7 +206,7 @@ export function ExampleResultsGallery({
       <dialog
         ref={dialogRef}
         aria-label={title ?? labels.region}
-        className="m-0 h-dvh max-h-none w-dvw max-w-none bg-transparent p-0 backdrop:bg-black/85 backdrop:backdrop-blur-[2px]"
+        className="m-0 h-dvh max-h-none w-dvw max-w-none bg-transparent p-0 backdrop:bg-[rgb(42_36_32_/_92%)]"
         onClose={() => setActiveIndex(null)}
         onKeyDown={(event) => {
           if (event.key === "ArrowRight") showRelative(1);
@@ -226,9 +232,15 @@ export function ExampleResultsGallery({
             <figure className="flex min-h-0 flex-col items-center gap-3">
               <Image
                 key={active.asset._id}
-                alt={active.alt ?? active.caption ?? ""}
+                alt={
+                  active.alt ??
+                  active.caption ??
+                  (language === "en"
+                    ? "Article illustration"
+                    : "Ilustrasi artikel")
+                }
                 blurDataURL={active.asset.metadata?.lqip ?? undefined}
-                className="max-h-[78dvh] w-auto max-w-full rounded-[0.625rem] object-contain"
+                className="max-h-[78dvh] w-auto max-w-full object-contain"
                 height={activeHeight}
                 placeholder={active.asset.metadata?.lqip ? "blur" : "empty"}
                 sizes="(max-width: 768px) 92vw, 700px"

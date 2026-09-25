@@ -1,0 +1,30 @@
+/* asyraf-tokens.css — SOURCE OF TRUTH lives in asyraf-ai/design/asyraf-tokens.css. Copy, don't edit downstream. */
+:root {
+  --paper:#f6f1e8; --paper-warm:#faf6ef; --paper-soft:#f0e8dc; --paper-card:#fffdf8; --paper-deep:#e9dfd0;
+  --ink:#2a2420; --ink-soft:#5c534c; --ink-mute:#71675f; --ink-faint:#c4b8ab;
+  --rule:rgb(42 36 32 / .18); --rule-strong:rgb(42 36 32 / .45);
+  --ochre:#c4784a; --ochre-soft:#d4926a; --ochre-deep:#9a5a34; --ochre-ink:#8a4a2b; --ochre-wash:#f3e4d4;
+  --terracotta:#b85c38; --terracotta-deep:#a1512f; --terracotta-soft:#d47855;
+  --font-display: var(--font-serif), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-sans), system-ui, sans-serif;
+  --font-note: var(--font-sketch), Georgia, serif;
+  --font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --step--2:.75rem; --step--1:.8125rem; --step-0:1rem; --step-1:1.125rem;
+  --step-2:clamp(1.25rem,1.1rem + .6vw,1.5rem); --step-3:clamp(1.5rem,1.25rem + 1vw,2rem);
+  --step-4:clamp(2rem,1.5rem + 2vw,2.75rem); --step-5:clamp(2.5rem,1.8rem + 3.2vw,4rem);
+  --step-6:clamp(3rem,1.6rem + 5.6vw,6rem);
+  --section:clamp(72px,10vw,128px); --gutter:clamp(20px,4vw,32px);
+  --page:80rem; --wide:64rem; --text:42rem; --measure:68ch;
+  --radius-0:0; --radius-input:2px; --radius-pill:999px;
+  --ease-out:cubic-bezier(.25,1,.5,1); --ease-out-expo:cubic-bezier(.16,1,.3,1);
+  --dur-fast:160ms; --dur-ui:240ms; --dur-enter:700ms;
+  --z-sticky:40; --z-dropdown:50; --z-overlay:80; --z-grain:90; --z-dialog:100; --z-toast:110;
+  color-scheme: light;
+}
+.dark, [data-theme="night"] {
+  --paper:#231e1b; --paper-card:#2a2420; --paper-soft:#342d28; --paper-deep:#2a2420;
+  --ink:#f3ece2; --ink-soft:#c4b8ab; --ink-mute:#c4b8ab; --ink-faint:#5c534c;
+  --rule:rgb(243 236 226 / .14); --rule-strong:rgb(243 236 226 / .4);
+  --ochre:#d4926a; --ochre-deep:#e0a37e; --ochre-ink:#e0a37e; --ochre-wash:#3a2e26;
+  color-scheme: dark;
+}

@@ -115,8 +115,8 @@ export function PromptSnippetCard({
       aria-label={`${labels.region}: ${title}`}
       className={
         isReader
-          ? "my-[1.6em] overflow-hidden rounded-[0.625rem] border border-(--reader-border)"
-          : "my-10 overflow-hidden rounded-lg border border-border bg-surface sm:my-12"
+          ? "my-[1.6em] overflow-hidden rounded-[2px] border border-(--reader-border)"
+          : "my-12 overflow-hidden rounded-[2px] border border-border bg-[var(--paper-soft)]"
       }
     >
       <div
@@ -145,8 +145,8 @@ export function PromptSnippetCard({
         <button
           className={
             status === "idle"
-              ? "inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-accent px-4 font-sans text-sm font-medium text-accent-foreground transition-colors hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              : "inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full bg-accent/15 px-4 font-sans text-sm font-medium text-accent transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              ? "inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-1.5 px-2 font-sans text-sm font-semibold text-[var(--ochre-ink)] underline underline-offset-4"
+              : "inline-flex min-h-11 shrink-0 cursor-pointer items-center gap-1.5 px-2 font-sans text-sm font-semibold text-[var(--ochre-ink)]"
           }
           type="button"
           onClick={onCopy}
@@ -169,8 +169,8 @@ export function PromptSnippetCard({
       <pre
         className={
           isReader
-            ? "max-h-80 overflow-auto px-4 py-4 font-mono text-[0.72em] leading-relaxed whitespace-pre-wrap text-(--reader-muted) sm:px-5"
-            : "max-h-80 overflow-auto px-4 py-4 font-mono text-[0.8125rem] leading-relaxed whitespace-pre-wrap text-foreground/75 sm:px-5"
+            ? "max-h-[28rem] overflow-auto px-4 py-4 font-mono text-[0.72em] leading-relaxed whitespace-pre-wrap text-(--reader-muted) sm:px-5"
+            : "max-h-[28rem] overflow-auto px-4 py-4 font-mono text-[0.875rem] leading-[1.6] whitespace-pre-wrap text-foreground/80 sm:px-5"
         }
       >
         {code}

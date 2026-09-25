@@ -1,7 +1,5 @@
 "use client";
 
-import "@fontsource-variable/gelasio";
-
 import { ChevronLeft, ChevronRight, Settings2, X } from "lucide-react";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
@@ -79,7 +77,14 @@ export function Reader({
 
   const viewRef = useRef(view);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLAnchorElement>(null);
+  const settingsButtonRef = useRef<HTMLButtonElement>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  const closeSettings = useCallback(() => {
+    setSettingsOpen(false);
+    window.requestAnimationFrame(() => settingsButtonRef.current?.focus());
+  }, []);
 
   useEffect(() => {
     viewRef.current = view;
@@ -159,9 +164,23 @@ export function Reader({
   useEffect(() => {
     const root = document.documentElement;
     const previousOverflow = root.style.overflow;
+    const background = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        ".ay-skip-link, .ay-masthead, .ay-index-wrap, .ay-footer",
+      ),
+    );
     root.style.overflow = "hidden";
+    background.forEach((element) => {
+      element.inert = true;
+      element.setAttribute("aria-hidden", "true");
+    });
+    closeRef.current?.focus();
     return () => {
       root.style.overflow = previousOverflow;
+      background.forEach((element) => {
+        element.inert = false;
+        element.removeAttribute("aria-hidden");
+      });
     };
   }, []);
 
@@ -191,7 +210,7 @@ export function Reader({
       } else if (event.key === "Escape") {
         // First Escape closes the settings panel, the next one the reader.
         if (settingsOpen) {
-          setSettingsOpen(false);
+          closeSettings();
         } else {
           router.push(`/${post.slug}`);
         }
@@ -200,7 +219,7 @@ export function Reader({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [goTo, post.slug, router, settingsOpen]);
+  }, [closeSettings, goTo, post.slug, router, settingsOpen]);
 
   const section = sections[view.index - 1];
   if (!section) return null;
@@ -208,11 +227,17 @@ export function Reader({
   const sectionTitle = section.title ?? post.title;
 
   return (
-    <div className="reader-root fixed inset-0 z-50 flex flex-col">
+    <div
+      aria-label={post.title}
+      aria-modal="true"
+      className="reader-root fixed inset-0 z-50 flex flex-col"
+      role="dialog"
+    >
       {/* Header: close · post + section title · settings */}
       <header className="relative border-b border-(--reader-border)">
         <div className="mx-auto grid h-14 w-full max-w-5xl grid-cols-[3rem_minmax(0,1fr)_3rem] items-center px-2 sm:px-4">
           <NextLink
+            ref={closeRef}
             aria-label={labels.close}
             className="reader-icon-btn justify-self-start"
             href={`/${post.slug}`}
@@ -232,11 +257,15 @@ export function Reader({
           </div>
 
           <button
+            ref={settingsButtonRef}
+            aria-controls="reader-settings"
             aria-expanded={settingsOpen}
             aria-label={labels.settings}
             className="reader-icon-btn justify-self-end"
             type="button"
-            onClick={() => setSettingsOpen((open) => !open)}
+            onClick={() =>
+              settingsOpen ? closeSettings() : setSettingsOpen(true)
+            }
           >
             <Settings2 aria-hidden size={20} strokeWidth={1.75} />
           </button>
@@ -247,7 +276,7 @@ export function Reader({
             labels={labels}
             prefs={prefs}
             onChange={updatePrefs}
-            onClose={() => setSettingsOpen(false)}
+            onClose={closeSettings}
           />
         ) : null}
       </header>
@@ -322,7 +351,10 @@ export function Reader({
             {labels.previous}
           </button>
 
-          <p className="text-xs text-(--reader-muted) tabular-nums sm:text-sm">
+          <p
+            aria-live="polite"
+            className="text-xs text-(--reader-muted) tabular-nums sm:text-sm"
+          >
             {labels.progress(view.index, total)}
           </p>
 
