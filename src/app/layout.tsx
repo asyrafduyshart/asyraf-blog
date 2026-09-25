@@ -47,9 +47,11 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     locale: "id_ID",
+    images: [{ url: "/og-default.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/og-default.png"],
   },
 };
 
