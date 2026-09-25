@@ -62,6 +62,10 @@ The Sanity API version is hard-coded to `2026-08-23` in `src/sanity/env.ts`.
 | `npm run build` | Production build (must pass before merging) |
 | `npm run start` | Serve the production build |
 | `npm run lint` | ESLint |
+| `npm run preview` | Build with OpenNext and run the Worker locally |
+| `npm run deploy` | Build and deploy the Worker |
+| `npm run upload` | Build and upload a Worker version without deploying |
+| `npm run cf-typegen` | Generate Cloudflare binding types |
 
 ## Project structure
 
@@ -80,4 +84,38 @@ src/
 
 ## Deployment
 
-Deploy anywhere Next.js runs (e.g. Vercel). Point the `blog.asyraf.ai` domain at the deployment; no environment variables are strictly required (see table above).
+### Vercel
+
+The existing Vercel deployment remains supported. `npm run build` still runs the
+standard Next.js production build, and the OpenNext files do not change that
+output.
+
+### Cloudflare Workers with OpenNext
+
+The Worker is configured in `wrangler.jsonc` with:
+
+- an R2 incremental-cache binding for `asyraf-blog-inc-cache`;
+- a Durable Object queue for time-based ISR revalidation;
+- Cloudflare Images for local `public/` images; and
+- a self-reference service binding used by the revalidation queue.
+
+Sanity images are resized directly by `cdn.sanity.io` through the custom
+`next/image` loader, avoiding Cloudflare Images transformations for remote
+content.
+
+Before the first remote deployment, create the cache bucket:
+
+```bash
+npx wrangler r2 bucket create asyraf-blog-inc-cache
+```
+
+Then use:
+
+```bash
+npm run preview
+npm run upload
+npm run deploy
+```
+
+`workers_dev` is enabled for preview deployments. No custom domain or route is
+configured yet; DNS and the current Vercel project are intentionally untouched.
