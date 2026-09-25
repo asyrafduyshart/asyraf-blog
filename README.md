@@ -94,6 +94,7 @@ output.
 
 The Worker is configured in `wrangler.jsonc` with:
 
+- `keep_names: false` so Wrangler/esbuild does not inject a `__name` helper into next-themes’ inline script (see [OpenNext keep_names](https://opennext.js.org/cloudflare/howtos/keep_names));
 - an R2 incremental-cache binding for `asyraf-blog-inc-cache`;
 - a Durable Object queue for time-based ISR revalidation;
 - Cloudflare Images for local `public/` images; and
