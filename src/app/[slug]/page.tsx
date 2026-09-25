@@ -4,10 +4,10 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
 
-import { Tape } from "../../../components/shared/Tape";
 import { CategoryChips } from "@/components/category-chips";
 import { HtmlLang } from "@/components/html-lang";
 import { PostBody } from "@/components/post-body";
+import Tape from "@/components/shared/Tape";
 import { splitReaderSections } from "@/lib/reader-sections";
 import { siteConfig } from "@/lib/site";
 import { formatDate, languageLabel, readingTimeLabel } from "@/lib/text";
@@ -113,7 +113,15 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
         };
 
   return (
-    <article lang={language}>
+    <article
+      data-article-category-href={
+        post.categories?.[0]
+          ? `/kategori/${post.categories[0].slug}`
+          : undefined
+      }
+      data-article-category-label={post.categories?.[0]?.title ?? undefined}
+      lang={language}
+    >
       <HtmlLang lang={language} />
 
       <header className="page-shell pt-16 pb-12 sm:pt-24 sm:pb-16">
@@ -162,7 +170,7 @@ export default async function PostPage({ params }: PageProps<"/[slug]">) {
 
       {mainImage ? (
         <figure className="paper-print relative mx-auto max-w-[var(--wide)] p-3">
-          <Tape />
+          <Tape className="blog-tape-top" />
           <Image
               priority
               alt={mainImage.alt ?? headline}

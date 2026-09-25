@@ -3,9 +3,8 @@ import { Architects_Daughter, Fraunces, Karla } from "next/font/google";
 
 import "./globals.css";
 
-import { SiteFooter } from "../../components/shared/SiteFooter";
-import { SiteHeader } from "../../components/shared/SiteHeader";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { BlogSiteHeader } from "@/components/blog-site-header";
+import SiteFooter from "@/components/shared/SiteFooter";
 import { READER_PREFS_PREPAINT_SCRIPT } from "@/lib/reader-prefs";
 import { siteConfig } from "@/lib/site";
 
@@ -71,7 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: READER_PREFS_PREPAINT_SCRIPT }}
         />
         <Providers>
-          <SiteHeader site="blog" tools={<ThemeSwitch />} />
+          <BlogSiteHeader />
           <main className="flex-1" id="main-content">
             {children}
           </main>

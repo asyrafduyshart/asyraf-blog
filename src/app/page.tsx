@@ -1,8 +1,8 @@
 import Image from "next/image";
 import NextLink from "next/link";
 
-import { Tape } from "../../components/shared/Tape";
 import { PostRow } from "@/components/post-row";
+import Tape from "@/components/shared/Tape";
 import { formatDate, readingTimeLabel } from "@/lib/text";
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
@@ -33,7 +33,7 @@ function ArrowRightIcon({ className }: { className?: string }) {
 function HeroPortrait() {
   return (
     <div className="paper-print relative mx-auto aspect-square w-full max-w-md -rotate-[1.5deg] p-3 lg:block">
-      <Tape />
+      <Tape className="blog-tape-top" />
       <Image
         alt="Potret woodcut Asyraf Duyshart"
         className="object-cover"
@@ -62,7 +62,7 @@ function FeaturedPost({ post }: { post: PostListItem }) {
     >
       {cover ? <figure>
         <div className="paper-print relative aspect-[3/2]">
-          <Tape />
+          <Tape className="blog-tape-top" />
           <Image
             alt={cover.alt ?? post.title}
             blurDataURL={cover.asset?.metadata?.lqip ?? undefined}
